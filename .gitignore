@@ -1,2 +1,7 @@
-.vscode/
 docs/
+bin/
+build/
+scripts/
+
+.vscode/
+.DS_Store

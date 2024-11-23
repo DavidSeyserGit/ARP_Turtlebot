@@ -35,8 +35,8 @@ public:
 private:   
     int socket_fd_; /**< File descriptor for the socket. */
     int server_port_; /**< The server's port number. */
-    static const std::string kServerIp; /**< The fixed IP address of the server. */
-    
+    static const std::string kServerIp_; /**< The fixed IP address of the server. */
+
     /**
      * @brief Establishes a connection to the server.
      * 
