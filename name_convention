@@ -1,0 +1,21 @@
+Nameconvention for gitpushes:
+
+branch/subbranch
+=
+feature/subfeature
+
+
+e.g.
+
+laserscan/node
+
+
+
+
+Add. Info:
+Use Google c++ style guide:
+
+https://docs.google.com/file/d/0B5FQoJdw1sdRVHRid21IalRRb3M/edit?pli=1&resourcekey=0-0OIuS0JpAEz34vYFETmWUQ
+
+
+Please only use english names and underscores for commits.
