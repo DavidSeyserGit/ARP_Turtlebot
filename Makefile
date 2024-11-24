@@ -1,5 +1,5 @@
 BUILD_DIR = build
-TEST_BIN = $(BUILD_DIR)/test/tests
+TEST_BIN = $(BUILD_DIR)/test
 
 .PHONY: all test run_main clean
 
@@ -11,7 +11,13 @@ all:
 
 # Shortcut to run tests
 test: all
-	@$(TEST_BIN)
+	@$(TEST_BIN)/test_client
+
+test_laser: all
+	@$(TEST_BIN)/test_laser
+
+test_laser: all
+	@$(TEST_BIN)/test_imu
 
 # Shortcut to run the main program
 run_main: all
