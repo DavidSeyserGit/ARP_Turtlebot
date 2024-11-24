@@ -12,7 +12,7 @@ A lightweight project for reading sensor data and writing `cmd_vel` commands to 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/robot_control.git
+   git clone https://github.com/DavidSeyserGit/ARP_Turtlebot
    cd robot_control
    make
    ```
