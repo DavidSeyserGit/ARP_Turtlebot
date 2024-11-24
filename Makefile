@@ -1,36 +1,22 @@
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Iinclude
-# Directories
-SRC_DIR = src
-TEST_DIR = test
 BUILD_DIR = build
-BIN_DIR = bin
+TEST_BIN = $(BUILD_DIR)/test/tests
 
-# Source files
-SRC_FILES = $(SRC_DIR)/main.cpp $(SRC_DIR)/client.cpp
-TEST_FILES = $(TEST_DIR)/test_client.cpp
+.PHONY: all test run_main clean
 
-TEST_LIBS = -lgtest -lpthread
+# Default target builds everything
+all:
+	@mkdir -p $(BUILD_DIR)
+	@cd $(BUILD_DIR) && cmake ..
+	@cd $(BUILD_DIR) && make
 
-# Output files
-MAIN_BIN = $(BIN_DIR)/main
-TEST_BIN = $(BIN_DIR)/tests
+# Shortcut to run tests
+test: all
+	@$(TEST_BIN)
 
-# Default target
-all: $(MAIN_BIN)
+# Shortcut to run the main program
+run_main: all
+	@$(BUILD_DIR)/src/main
 
-# Build main program
-$(MAIN_BIN): $(SRC_FILES)
-	mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# Build tests
-test: $(TEST_FILES) $(SRC_DIR)/client.cpp
-	mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $(TEST_BIN) $^ $(TEST_LIBS)
-	./$(TEST_BIN)
-
-# Clean build files
+# Clean the build directory
 clean:
-	rm -rf $(BIN_DIR) $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
