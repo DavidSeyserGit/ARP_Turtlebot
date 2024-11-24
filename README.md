@@ -1,11 +1,11 @@
 # Robot Control System in C++
 
-A lightweight project for reading sensor data and writing `cmd_vel` commands to a robot, implemented in plain C++ without additional frameworks.
+A lightweight project for reading sensor data and writing velocities commands to a turtlebot, implemented in plain C++ without additional frameworks.
 
 ## Features
 
 - Real-time sensor data reading
-- Command generation for robot movement
+- Sending Velocities for robot movement
 - Framework-independent, modular design
 
 ## Build Instructions
@@ -13,7 +13,7 @@ A lightweight project for reading sensor data and writing `cmd_vel` commands to 
 1. Clone the repository:
    ```bash
    git clone https://github.com/DavidSeyserGit/ARP_Turtlebot
-   cd robot_control
+   cd ARP_Turtlebot
    make
    ```
    
