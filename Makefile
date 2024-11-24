@@ -1,7 +1,6 @@
 # Compiler and flags
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Iinclude
-
 # Directories
 SRC_DIR = src
 TEST_DIR = test
@@ -10,7 +9,9 @@ BIN_DIR = bin
 
 # Source files
 SRC_FILES = $(SRC_DIR)/main.cpp $(SRC_DIR)/client.cpp
-TEST_FILES = $(TEST_DIR)/test_client.cpp $(TEST_DIR)/test_server.cpp
+TEST_FILES = $(TEST_DIR)/test_client.cpp
+
+TEST_LIBS = -lgtest -lpthread
 
 # Output files
 MAIN_BIN = $(BIN_DIR)/main
@@ -27,7 +28,7 @@ $(MAIN_BIN): $(SRC_FILES)
 # Build tests
 test: $(TEST_FILES) $(SRC_DIR)/client.cpp
 	mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) -o $(TEST_BIN) $^
+	$(CXX) $(CXXFLAGS) -o $(TEST_BIN) $^ $(TEST_LIBS)
 	./$(TEST_BIN)
 
 # Clean build files

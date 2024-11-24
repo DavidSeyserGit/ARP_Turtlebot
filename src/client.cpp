@@ -77,6 +77,17 @@ void Client::CloseConnection() {
   }
 }
 
+/**
+ * @brief Receives data from the server as a string.
+ * 
+ * This function reads data from the server into a buffer and converts it
+ * into a string. The buffer size is fixed at 1024 bytes. If the reception
+ * fails, an exception is thrown.
+ * 
+ * @return A string containing the data received from the server.
+ * 
+ * @throw std::runtime_error If the data reception fails.
+ */
 std::string Client::ReceiveData(){
     constexpr int kBufferSize = 1024;
     char buffer[kBufferSize];
