@@ -71,6 +71,7 @@ void Client::ConnectToServer(){
         throw std::runtime_error("Failed to create socket"); //critical error, throw an execption
     }
 
+    //this section is already system-independent because windows and unix use Berkley Sockets API
     sockaddr_in server_adress;
     std::memset(&server_adress, 0, sizeof(server_adress)); //fill the server_adress with 0's 
     server_adress.sin_family = AF_INET;
@@ -87,18 +88,15 @@ void Client::ConnectToServer(){
     std::cout << "Succesfully connected to IP adress: " << kServerIp_ << std::endl;
 }
 
-/**
- * @brief Receives data from the server as a string.
- * 
- * @return A string containing the data received from the server.
- * 
- * @throw std::runtime_error If the data reception fails.
- */
 void Client::CloseConnection() {
-  if (socket_fd_ >= 0) {
-    close(socket_fd_);
-    std::cout << "Connection closed." << std::endl;
-  }
+    if (socket_fd_ >= 0) {
+#ifdef _WIN32
+        closesocket(socket_fd_);
+#else
+        close(socket_fd_);
+#endif
+        std::cout << "Connection closed." << std::endl;
+    }
 }
 
 /**
