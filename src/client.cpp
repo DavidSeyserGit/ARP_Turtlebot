@@ -10,8 +10,21 @@
 #include <iostream>
 #include <cstring>
 #include <stdexcept>
-#include <arpa/inet.h>
-#include <unistd.h>
+/*
+    most implementations are in kernel-space and therefore
+    OS-specific code needs to be written
+    windows has winsock and unix-based systems can use arap/inet
+*/
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "Ws2_32.lib")
+    #pragma comment (lib, "Mswsock.lib")
+    #pragma comment (lib, "AdvApi32.lib")
+#else
+    #include <arpa/inet.h>
+    #include <unistd.h>
+#endif
 
 const std::string Client::kServerIp_ = "127.0.0.1";
 
@@ -42,7 +55,18 @@ Client::~Client(){
  * connection fails.
  */
 void Client::ConnectToServer(){
-    socket_fd_ = socket(AF_INET, SOCK_STREAM, 0);
+#ifdef _WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        throw std::runtime_error("WSAStartup failed");
+    }
+#endif
+    socket_fd_ = 
+#ifdef _WIN32
+        socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+#else
+        socket(AF_INET, SOCK_STREAM, 0);
+#endif
     if (socket_fd_ < 0){
         throw std::runtime_error("Failed to create socket"); //critical error, throw an execption
     }
