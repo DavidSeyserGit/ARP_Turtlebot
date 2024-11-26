@@ -1,6 +1,8 @@
 #include "../include/client/client.h"
+#include <atomic>
 #include <iostream>
 #include <stdexcept>
+#include <thread>
 
 /**
  * @file main.cpp
@@ -25,7 +27,11 @@
 extern void SendCmdVel(int port);
 
 int main() {
-    SendCmdVel(9999);
+    try{
+        SendCmdVel(9999);
+    }catch(const std::exception e){
+        std::cerr << e.what() << std::endl;
+    }
     /*
     Client client(9997);
     while(1){

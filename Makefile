@@ -16,8 +16,11 @@ test: all
 test_laser: all
 	@$(TEST_BIN)/test_laser
 
-test_laser: all
+test_imu: all
 	@$(TEST_BIN)/test_imu
+
+test_cmd_vel: all
+	@$(TEST_BIN)/test_cmd_vel
 
 # Shortcut to run the main program
 run_main: all
