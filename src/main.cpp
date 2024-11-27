@@ -27,11 +27,7 @@
 extern void SendCmdVel(int port);
 
 int main() {
-    try{
-        SendCmdVel(9999);
-    }catch(const std::exception e){
-        std::cerr << e.what() << std::endl;
-    }
+    SendCmdVel(9999);
     /*
     Client client(9997);
     while(1){

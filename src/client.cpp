@@ -55,7 +55,7 @@ Client::~Client(){
  * connection fails.
  */
 void Client::ConnectToServer(){
-#ifdef _WIN32
+#ifdef _WIN32 //if windows is the operating system the windows dll's are used that are nativly installed in windows
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         throw std::runtime_error("WSAStartup failed");

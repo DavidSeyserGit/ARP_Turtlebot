@@ -2,6 +2,9 @@
 #include <catch2/catch_all.hpp>
 #include "../include/client/client.h"  // Adjust the path as needed to your Client class
 
+//add server node needs to be running for all test to pass
+    //mock server could be used to simulate the behaviour
+
 TEST_CASE("Client establishes a connection", "[client]") {
     REQUIRE_NOTHROW(Client(9997));  // Check that creating a client connection does not throw an exception
 }

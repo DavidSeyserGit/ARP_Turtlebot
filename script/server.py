@@ -1,6 +1,6 @@
 import socket
 
-def start_server(host='127.0.0.1', port=9999):
+def start_server(host='127.0.0.1', port=9997):
     """
     Start a TCP server that listens for connections and prints received messages.
     """
