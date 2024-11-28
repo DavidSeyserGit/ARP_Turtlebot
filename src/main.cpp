@@ -1,4 +1,5 @@
-#include "../include/client/client.h"
+#include "client/client.h"
+#include "shared_memory/shared_memory.h"
 #include <atomic>
 #include <iostream>
 #include <stdexcept>
@@ -15,32 +16,51 @@
  * It runs an infinite loop and lacks advanced error handling or resource management.
  */
 
-/**
- * @brief Declares the cmd_vel function for sending velocity commands to the robot.
- * 
- * This function is defined in cmd_vel.cpp and is responsible for calculating
- * and sending velocity commands (linear and angular velocities) to the robot.
- * It is used within the main application to control robot movement.
- * 
- * @see cmd_vel.cpp
- */
 extern void SendCmdVel(int port);
+extern bool CreateSharedMemory(const std::string& name, size_t size, void*& memory);
+extern bool AttachSharedMemory(const std::string& name, size_t size, void*& memory);
+extern void DetachSharedMemory(void* memory, size_t size);
+extern void DestroySharedMemory(const std::string& name);
+
+/*
+we can use shared_memory  to give a region in memory 
+a name and save our data from the imu and laserscan to this region in memory
+
+we can then read this data from python or rust with the same name 
+
+we need to use semaphores for this so that we dont clash trying to access the memory
+at the same time
+*/
 
 int main() {
-    SendCmdVel(9999);
+    try
+    {
+        SendCmdVel(9997);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
     /*
-    Client client(9997);
-    while(1){
-        try {
-            std::string received_data = client.ReceiveData();
+    try
+    {
+        Client client(9997);
+        while(1){
+            try {
+                std::string received_data = client.ReceiveData();
 
-            std::cout << "data rec: " << received_data << std::endl;
+                std::cout << "data rec: " << received_data << std::endl;
 
-        } catch (const std::runtime_error& e) {
-            
-            std::cerr << "Error: " << e.what() << std::endl;
-            return 1; 
+            } catch (const std::runtime_error& e) {
+                
+                std::cerr << "Error: " << e.what() << std::endl;
+                return 1; 
+            }
         }
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
     }
     */
     return 0;
