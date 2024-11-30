@@ -1,8 +1,9 @@
 import socket
+import time
 
-def start_server(host='127.0.0.1', port=9999):
+def start_server(host='127.0.0.1', port=9997, message="Hello, Client!"):
     """
-    Start a TCP server that listens for connections and prints received messages.
+    Start a TCP server that listens for connections and sends messages to clients.
     """
     # Create a socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,15 +22,14 @@ def start_server(host='127.0.0.1', port=9999):
             client_socket, client_address = server_socket.accept()
             print(f"Connection established with {client_address}")
             
-            # Receive data
-            while True:
-                data = client_socket.recv(1024)  # Buffer size of 1024 bytes
-                if not data:
-                    print("Client disconnected.")
-                    break
-                
-                # Print received data
-                print("Received:", data.decode('utf-8'))
+            try:
+                # Send data to the client in a loop
+                while True:
+                    client_socket.sendall(message.encode('utf-8'))
+                    print(f"Sent: {message}")
+                    time.sleep(1)  # Send a message every second
+            except (BrokenPipeError, ConnectionResetError):
+                print("Client disconnected.")
             
             # Close the client socket
             client_socket.close()

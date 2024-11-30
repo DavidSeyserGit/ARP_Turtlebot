@@ -1,74 +1,132 @@
 #ifndef SEND_CMD_VEL_H_
 #define SEND_CMD_VEL_H_
 
-#include <arpa/inet.h>
-#include <atomic>
-#include <chrono>  
 #include <iostream>
+#include <format>
 #include <stdexcept>
 #include <string>
-#include <sys/socket.h>
 #include <thread>
-#include <unistd.h>
+#include <chrono>
+#include <cstring>
 
-// Sends a velocity command as a formatted string over TCP to the specified port.
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <ws2tcpip.h>
+    #pragma comment(lib, "Ws2_32.lib")
+#else
+    #include <arpa/inet.h>
+    #include <sys/socket.h>
+    #include <unistd.h>
+#endif
+
 void SendCmdVel(int port) {
-    const std::string kServerIp_ = "127.0.0.1";
-    /*
-        start the connection to the robot on the IP with Socket 9999 
-    */
-    int socket_fd_ = socket(AF_INET, SOCK_STREAM, 0);
-    if(socket_fd_ < 0){
+    const std::string kServerIp_ = "192.168.100.51";
+
+#ifdef _WIN32
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        throw std::runtime_error("Failed to initialize Winsock");
+    }
+    #endif
+
+    // Create a socket
+    int socket_fd = 
+    #ifdef _WIN32
+        socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    #else
+        socket(AF_INET, SOCK_STREAM, 0);
+    #endif
+
+    if (socket_fd < 0) {
+    #ifdef _WIN32
+        throw std::runtime_error("Failed to create socket: " + std::to_string(WSAGetLastError()));
+    #else
         throw std::runtime_error("Failed to create socket");
-    };
-
-    sockaddr_in server_adress;
-    std::memset(&server_adress, 0, sizeof(server_adress));
-    server_adress.sin_family = AF_INET;
-    server_adress.sin_port = htons(9999); //fixed port for sending data to the robot
-    
-    if (inet_pton(AF_INET, kServerIp_.c_str(), &server_adress.sin_addr)<0){
-        throw std::runtime_error("Invalid server IP adress");
+    #endif
     }
 
-    if (connect(socket_fd_, reinterpret_cast<sockaddr*>(&server_adress), sizeof(server_adress)) < 0){
+    // Configure the server address
+    sockaddr_in server_address;
+    std::memset(&server_address, 0, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(port);
+    
+    if (inet_pton(AF_INET, kServerIp_.c_str(), &server_address.sin_addr) <= 0) {
+    #ifdef _WIN32
+        closesocket(socket_fd);
+        WSACleanup();
+    #else
+        close(socket_fd);
+    #endif
+
+        throw std::runtime_error("Invalid server IP address");
+    }
+
+    // Connect to the server
+    if (connect(socket_fd, reinterpret_cast<sockaddr*>(&server_address), sizeof(server_address)) < 0) {
+    #ifdef _WIN32
+        closesocket(socket_fd);
+        WSACleanup();
         throw std::runtime_error("Connection failed");
+    #else
+        close(socket_fd);
+        perror("Connection error");
+        throw std::runtime_error("Connection failed");
+    #endif
     }
-    /*
-    send data
 
-    message is of this type:
-    "---START---{\"linear\": 0.0, \"angular\": 0}___END___";
-    so a messagebuffer can be used to construct this message
-
-    for this snprintf can be used
-        -> only stack allocated
-        -> avoiding heap allocation
-
-    ---START---             -> 11 characters
-    {\"linear\":            -> 12 characters                  
-    <linear_velocity>       -> when used as a double: 12 characters
-    ,\"angular\":           -> 13 characters
-    <angular_velocity>      -> when used as a double: 12 characters
-    }___END___              -> 10 characters
-    
-    buffer needs to be at least 70 characters long
-    */
+    // Message buffer
     char buffer[70];
-    memset(buffer, 0, 70); //fill the buffer with 0
+    std::memset(buffer, 0, strlen(buffer));
 
-    double linear_velocity = 0;
-    double angular_velocity = 0;
-    while(1){
-        //only for testing
-        int message_length = snprintf(buffer, sizeof(buffer),
-                "---START---{\"linear\": %.2f, \"angular\": %.2f}___END___",
-                linear_velocity, angular_velocity);                             
-        std::string message(buffer, message_length);
-        size_t bytes_sent = send(socket_fd_, buffer, sizeof(buffer), 0);
-        std::cout << message << std::endl;
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // Example velocities
+    double linear_velocity = 0.0;
+    double angular_velocity = 0.0;
+
+    // Send data in a loop
+while (true) {
+    // Format the message
+    int message_length = std::snprintf(buffer, sizeof(buffer),
+        "---START---{\"linear\": %.2f, \"angular\": %.2f}___END___",
+        linear_velocity, angular_velocity);
+
+    // Check if formatting was successful
+    if (message_length < 0 || message_length >= static_cast<int>(sizeof(buffer))) {
+        std::cerr << "Error: Failed to format the message" << std::endl;
+        break;
     }
+
+    // Send the formatted message
+    ssize_t bytes_sent = send(socket_fd, buffer, message_length, 0);
+
+    // Handle errors in send
+    if (bytes_sent < 0) {
+        perror("Send failed");
+        break; // Exit loop on error
+    }
+
+    // Print the message and bytes sent
+    std::cout << "Bytes sent: " << bytes_sent << std::endl;
+    std::cout << "Sent: " << std::string(buffer, message_length) << std::endl;
+    linear_velocity +=0.1;
+    angular_velocity +=0.1; 
+
+    if (angular_velocity > 0.3)
+    {
+        break;
+    }
+    
+    // Pause for 1 second before sending the next message
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+}
+
+    // Close the socket
+#ifdef _WIN32
+    closesocket(socket_fd);
+    WSACleanup();
+#else
+    close(socket_fd);
+#endif
 }
 
 #endif  // SEND_CMD_VEL_H_
