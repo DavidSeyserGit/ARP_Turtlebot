@@ -2,6 +2,7 @@
 #define SEND_CMD_VEL_H_
 
 #include <iostream>
+#include <format>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -19,7 +20,7 @@
 #endif
 
 void SendCmdVel(int port) {
-    const std::string kServerIp_ = "127.0.0.1";
+    const std::string kServerIp_ = "192.168.100.51";
 
 #ifdef _WIN32
     WSADATA wsaData;
@@ -76,37 +77,48 @@ void SendCmdVel(int port) {
 
     // Message buffer
     char buffer[70];
-    std::memset(buffer, 0, sizeof(buffer));
+    std::memset(buffer, 0, strlen(buffer));
 
     // Example velocities
     double linear_velocity = 0.0;
     double angular_velocity = 0.0;
 
     // Send data in a loop
-    while (true) {
-        int message_length = snprintf(buffer, sizeof(buffer),
-                                      "---START---{\"linear\": %.2f, \"angular\": %.2f}___END___",
-                                      linear_velocity, angular_velocity);
-        if (message_length < 0 || message_length >= static_cast<int>(sizeof(buffer))) {
-            throw std::runtime_error("Failed to format message");
-        }
+while (true) {
+    // Format the message
+    int message_length = std::snprintf(buffer, sizeof(buffer),
+        "---START---{\"linear\": %.2f, \"angular\": %.2f}___END___",
+        linear_velocity, angular_velocity);
 
-        ssize_t bytes_sent = send(socket_fd, buffer, message_length, 0);
-    
-        //error handeling when no data is sent must be added later -> non fatal error and we should try again
-        if (bytes_sent < 0) {
-        #ifdef _WIN32
-            std::cerr << "Failed to send data: " << WSAGetLastError() << std::endl;
-        #else
-            perror("Failed to send data");
-        #endif
-        } else {
-            std::cout << "Sent: " << std::string(buffer, message_length) << std::endl;
-        }
-
-        // Pause for 1 second before sending the next message
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+    // Check if formatting was successful
+    if (message_length < 0 || message_length >= static_cast<int>(sizeof(buffer))) {
+        std::cerr << "Error: Failed to format the message" << std::endl;
+        break;
     }
+
+    // Send the formatted message
+    ssize_t bytes_sent = send(socket_fd, buffer, message_length, 0);
+
+    // Handle errors in send
+    if (bytes_sent < 0) {
+        perror("Send failed");
+        break; // Exit loop on error
+    }
+
+    // Print the message and bytes sent
+    std::cout << "Bytes sent: " << bytes_sent << std::endl;
+    std::cout << "Sent: " << std::string(buffer, message_length) << std::endl;
+    linear_velocity +=0.1;
+    angular_velocity +=0.1; 
+
+    if (angular_velocity > 0.3)
+    {
+        break;
+    }
+    
+    // Pause for 1 second before sending the next message
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+}
 
     // Close the socket
 #ifdef _WIN32

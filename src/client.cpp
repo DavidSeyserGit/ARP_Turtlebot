@@ -26,7 +26,7 @@
     #include <unistd.h>
 #endif
 
-const std::string Client::kServerIp_ = "127.0.0.1";
+const std::string Client::kServerIp_ = "192.168.100.51";
 
 /**
  * @brief Constructs a Client object and connects to the server.
@@ -104,7 +104,7 @@ void Client::CloseConnection() {
  * @brief Receives data from the server as a string.
  * 
  * This function reads data from the server into a buffer and converts it
- * into a string. The buffer size is fixed at 1024 bytes. If the reception
+ * into a string. The buffer size is fixed at 1024 chars. If the reception
  * fails, an exception is thrown.
  * 
  * @return A string containing the data received from the server.
@@ -112,7 +112,7 @@ void Client::CloseConnection() {
  * @throw std::runtime_error If the data reception fails.
  */
 std::string Client::ReceiveData(){
-    constexpr int kBufferSize = 1024;
+    constexpr int kBufferSize = 1024000;
     char buffer[kBufferSize];
     std::memset(buffer, 0, kBufferSize);
 

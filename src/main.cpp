@@ -33,9 +33,10 @@ at the same time
 */
 
 int main() {
+    
     try
     {
-        SendCmdVel(9997);
+        SendCmdVel(9999);
     }
     catch(const std::exception& e)
     {
@@ -49,7 +50,7 @@ int main() {
             try {
                 std::string received_data = client.ReceiveData();
 
-                std::cout << "data rec: " << received_data << std::endl;
+                std::cout << received_data << std::endl;
 
             } catch (const std::runtime_error& e) {
                 
