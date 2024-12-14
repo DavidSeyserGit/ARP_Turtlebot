@@ -9,40 +9,20 @@
 #include <chrono>
 #include <cstring>
 
-#ifdef _WIN32
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
-    #pragma comment(lib, "Ws2_32.lib")
-#else
-    #include <arpa/inet.h>
-    #include <sys/socket.h>
-    #include <unistd.h>
-#endif
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <unistd.h>
+
 
 void SendCmdVel(int port) {
     const std::string kServerIp_ = "192.168.100.51";
 
-#ifdef _WIN32
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-        throw std::runtime_error("Failed to initialize Winsock");
-    }
-    #endif
-
     // Create a socket
     int socket_fd = 
-    #ifdef _WIN32
-        socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    #else
         socket(AF_INET, SOCK_STREAM, 0);
-    #endif
 
     if (socket_fd < 0) {
-    #ifdef _WIN32
-        throw std::runtime_error("Failed to create socket: " + std::to_string(WSAGetLastError()));
-    #else
         throw std::runtime_error("Failed to create socket");
-    #endif
     }
 
     // Configure the server address
@@ -52,27 +32,15 @@ void SendCmdVel(int port) {
     server_address.sin_port = htons(port);
     
     if (inet_pton(AF_INET, kServerIp_.c_str(), &server_address.sin_addr) <= 0) {
-    #ifdef _WIN32
-        closesocket(socket_fd);
-        WSACleanup();
-    #else
         close(socket_fd);
-    #endif
-
         throw std::runtime_error("Invalid server IP address");
     }
 
     // Connect to the server
     if (connect(socket_fd, reinterpret_cast<sockaddr*>(&server_address), sizeof(server_address)) < 0) {
-    #ifdef _WIN32
-        closesocket(socket_fd);
-        WSACleanup();
-        throw std::runtime_error("Connection failed");
-    #else
         close(socket_fd);
         perror("Connection error");
         throw std::runtime_error("Connection failed");
-    #endif
     }
 
     // Message buffer
