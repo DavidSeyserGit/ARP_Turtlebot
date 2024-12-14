@@ -17,6 +17,7 @@
  */
 
 extern void SendCmdVel(int port);
+extern void ProcessAndStoreOdometryData(Client& client);
 extern bool CreateSharedMemory(const std::string& name, size_t size, void*& memory);
 extern bool AttachSharedMemory(const std::string& name, size_t size, void*& memory);
 extern void DetachSharedMemory(void* memory, size_t size);
@@ -33,7 +34,7 @@ at the same time
 */
 
 int main() {
-    
+    /*
     try
     {
         SendCmdVel(9999);
@@ -42,10 +43,10 @@ int main() {
     {
         std::cerr << e.what() << '\n';
     }
-    /*
+    
     try
     {
-        Client client(9997);
+        Client client(9998);
         while(1){
             try {
                 std::string received_data = client.ReceiveData();
@@ -63,6 +64,12 @@ int main() {
     {
         std::cerr << e.what() << '\n';
     }
-    */
+
     return 0;
+    */
+   	Client client(9998);
+    while(true){
+    ProcessAndStoreOdometryData(client);
+    }
+
 }
