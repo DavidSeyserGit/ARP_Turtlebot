@@ -1,9 +1,36 @@
 import socket
+import sys
+from multiprocessing import shared_memory
 
-def start_server(host='127.0.0.1', port=9997):
+def destroy_existing_shared_memory(name):
     """
-    Start a TCP server that listens for connections and prints received messages.
+    Destroy an existing shared memory block if it exists.
     """
+    try:
+        shm = shared_memory.SharedMemory(name=name)
+        shm.close()
+        shm.unlink()
+        print(f"Existing shared memory '{name}' destroyed.")
+    except FileNotFoundError:
+        print(f"No existing shared memory '{name}' to destroy.")
+    except Exception as e:
+        print(f"Error destroying shared memory '{name}': {e}")
+
+def start_server(host='127.0.0.1', port=9997, shm_size=1024):
+    """
+    Start a TCP server that creates a shared memory block and does nothing with it.
+    """
+    # Destroy existing shared memory at the start
+    destroy_existing_shared_memory("odom_data")
+
+    # Create shared memory block
+    try:
+        shm = shared_memory.SharedMemory(name="odom_data", create=True, size=shm_size)
+        print("Shared memory created with name 'odom_data' and size:", shm_size)
+    except Exception as e:
+        print(f"Error creating shared memory: {e}")
+        sys.exit(1)
+    
     # Create a socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -40,7 +67,10 @@ def start_server(host='127.0.0.1', port=9997):
     except Exception as e:
         print(f"Error: {e}")
     finally:
-        # Close the server socket
+        # Clean up
+        print("Cleaning up shared memory and closing server.")
+        shm.close()
+        shm.unlink()
         server_socket.close()
 
 if __name__ == "__main__":
