@@ -15,16 +15,8 @@
     OS-specific code needs to be written
     windows has winsock and unix-based systems can use arap/inet
 */
-#ifdef _WIN32
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
-    #pragma comment(lib, "Ws2_32.lib")
-    #pragma comment (lib, "Mswsock.lib")
-    #pragma comment (lib, "AdvApi32.lib")
-#else
-    #include <arpa/inet.h>
-    #include <unistd.h>
-#endif
+#include <arpa/inet.h>
+#include <unistd.h>
 
 const std::string Client::kServerIp_ = "192.168.100.51";
 
@@ -55,19 +47,8 @@ Client::~Client(){
  * connection fails.
  */
 void Client::ConnectToServer(){
-#ifdef _WIN32 //if windows is the operating system, windows dll's are used that are nativly installed on windows
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-        throw std::runtime_error("WSAStartup failed");
-        exit(EXIT_FAILURE);
-    }
-#endif
-    socket_fd_ = 
-#ifdef _WIN32
-        socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-#else
+    socket_fd_ =
         socket(AF_INET, SOCK_STREAM, 0);
-#endif
     if (socket_fd_ < 0){
         throw std::runtime_error("Failed to create socket"); //critical error, throw an execption
     }
@@ -91,11 +72,7 @@ void Client::ConnectToServer(){
 
 void Client::CloseConnection() {
     if (socket_fd_ >= 0) {
-#ifdef _WIN32
-        closesocket(socket_fd_);
-#else
         close(socket_fd_);
-#endif
         std::cout << "Connection closed." << std::endl;
     }
 }

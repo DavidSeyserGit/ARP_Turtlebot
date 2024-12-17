@@ -2,20 +2,42 @@
 #define SEND_CMD_VEL_H_
 
 #include <iostream>
-#include <format>
 #include <stdexcept>
 #include <string>
 #include <thread>
 #include <chrono>
 #include <cstring>
-
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-#include <unistd.h>
+
+struct OdomData{
+    float x;
+    float y;
+    float theta;
+};
 
 
 void SendCmdVel(int port) {
     const std::string kServerIp_ = "192.168.100.51";
+    const std::string shm_name = "/odom_data";  // Shared memory name
+
+    //open shared memory
+    int shm_fd = shm_open(shm_name.c_str(), O_RDONLY, 0666);
+    if (shm_fd < 0) {
+        throw std::runtime_error("Failed to open shared memory");
+    }      
+
+    // Map shared memory
+    void* shm_ptr = mmap(0, sizeof(OdomData), PROT_READ, MAP_SHARED, shm_fd, 0);
+    if (shm_ptr == MAP_FAILED) {
+        close(shm_fd);
+        throw std::runtime_error("Failed to map shared memory");
+    }
+
+    OdomData* odomData = static_cast<OdomData*>(shm_ptr); //here i get the shared memory data
 
     // Create a socket
     int socket_fd = 
