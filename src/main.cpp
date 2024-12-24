@@ -19,7 +19,6 @@
 extern void SendCmdVel(int port);
 
 #include "client/client.h"
-#include "shared_memory/shared_memory.h"
 #include <atomic>
 #include <iostream>
 #include <stdexcept>

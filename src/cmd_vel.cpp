@@ -117,13 +117,7 @@ void SendCmdVel(int port) {
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
 
-    // Close the socket
-#ifdef _WIN32
-    closesocket(socket_fd);
-    WSACleanup();
-#else
     close(socket_fd);
-#endif
 }
 
 #endif  // SEND_CMD_VEL_H_
