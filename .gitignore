@@ -1,7 +1,1 @@
-bin/
-build/
-scripts/
-
-.vscode/
-.DS_Store
-Doxyfile
+build
