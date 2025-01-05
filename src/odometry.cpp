@@ -9,10 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "client/client.h"
-#include <json/json.h> // Assuming a JSON library is available
-
-constexpr char kSharedMemoryName[] = "/odom_data";
-constexpr size_t kSharedMemorySize = sizeof(OdomData);
+#include <jsoncpp/json/json.h> // JSONCPP library
 
 struct OdomData {
     float x;
@@ -20,23 +17,19 @@ struct OdomData {
     float theta;
 };
 
-void ProcessAndStoreOdometryData(Client& client) {
-    // Open or create shared memory
-    int shm_fd = shm_open(kSharedMemoryName, O_CREAT | O_RDWR, 0666);
-    if (shm_fd < 0) {
-        throw std::runtime_error("Failed to create shared memory");
-    }
+constexpr char kSharedMemoryName[] = "/odom_data";
+constexpr size_t kSharedMemorySize = sizeof(OdomData);
 
-    if (ftruncate(shm_fd, kSharedMemorySize) == -1) {
-        close(shm_fd);
-        shm_unlink(kSharedMemoryName);
-        throw std::runtime_error("Failed to set shared memory size");
+void ProcessAndStoreOdometryData(Client& client) {
+    // Open shared memory
+    int shm_fd = shm_open(kSharedMemoryName, O_RDWR, 0666);
+    if (shm_fd < 0) {
+        throw std::runtime_error("Failed to open shared memory");
     }
 
     void* shared_memory = mmap(0, kSharedMemorySize, PROT_WRITE, MAP_SHARED, shm_fd, 0);
     if (shared_memory == MAP_FAILED) {
         close(shm_fd);
-        shm_unlink(kSharedMemoryName);
         throw std::runtime_error("Failed to map shared memory");
     }
 
@@ -52,7 +45,10 @@ void ProcessAndStoreOdometryData(Client& client) {
         Json::CharReaderBuilder reader;
         std::string errors;
 
-        if (!Json::parseFromStream(reader, std::istringstream(received_data), &root, &errors)) {
+        std::istringstream stream(received_data);
+
+
+        if (!Json::parseFromStream(reader,stream, &root, &errors)) {
             throw std::runtime_error("Failed to parse JSON: " + errors);
         }
 
