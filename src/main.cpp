@@ -1,5 +1,4 @@
 #include "client/client.h"
-#include "shared_memory/shared_memory.h"
 #include <atomic>
 #include <iostream>
 #include <stdexcept>
@@ -15,13 +14,15 @@
  * @note This is a test program and is not intended for production use.
  * It runs an infinite loop and lacks advanced error handling or resource management.
  */
+struct OdomData {
+    float x;
+    float y;
+    float theta;
+}; //seyser der befehl extern geht nicht auf strukturen, und ich wollte jz nur für das struct keine explizite header datei erstellen deswegen habe ich es hier eins zu eins definiert
 
 extern void SendCmdVel(int port);
-extern void ProcessAndStoreOdometryData(Client& client);
-extern bool CreateSharedMemory(const std::string& name, size_t size, void*& memory);
-extern bool AttachSharedMemory(const std::string& name, size_t size, void*& memory);
-extern void DetachSharedMemory(void* memory, size_t size);
-extern void DestroySharedMemory(const std::string& name);
+extern OdomData* InitializeSharedMemory(int& shm_fd);
+extern void ProcessAndStoreOdometryData(Client& client, OdomData* odom_data);
 
 /*
 we can use shared_memory  to give a region in memory 
@@ -68,8 +69,16 @@ int main() {
     return 0;
     */
    	Client client(9998);
+    int shm_fd;
+    OdomData* odom_data = InitializeSharedMemory(shm_fd);
     while(true){
-    ProcessAndStoreOdometryData(client);
+    ProcessAndStoreOdometryData(client, odom_data);
     }
+    /*Cleanup shared memory
+    munmap(odom_data, kSharedMemorySize);
+    close(shm_fd);
+    shm_unlink("/my_shared_memory");
+
+    return 0;*/
 
 }
