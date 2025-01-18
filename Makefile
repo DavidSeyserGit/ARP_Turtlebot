@@ -1,7 +1,9 @@
 BUILD_DIR = build
 TEST_BIN = $(BUILD_DIR)/test
+ODOM_BIN = $(BUILD_DIR)/src/odom
+MAIN_BIN = $(BUILD_DIR)/src/main
 
-.PHONY: all test run_main clean
+.PHONY: all test run_main run_all stop clean
 
 # Default target builds everything
 all:
@@ -24,8 +26,25 @@ test_cmd_vel: all
 
 # Shortcut to run the main program
 run_main: all
-	@$(BUILD_DIR)/src/main
+	@$(MAIN_BIN)
+
+# Run odom first, then main
+run_all: all
+	@echo "Running odom..."
+	@$(ODOM_BIN) & echo $$! > odom.pid
+	@sleep 2 # Give odom time to initialize shared memory
+	@echo "Running main..."
+	@$(MAIN_BIN) & echo $$! > main.pid
+	@echo "Both odom and main are running. Use 'make stop' to terminate."
+
+# Stop both odom and main
+stop:
+	@echo "Stopping processes..."
+	@if [ -f odom.pid ]; then kill -9 $$(cat odom.pid) && rm -f odom.pid; fi
+	@if [ -f main.pid ]; then kill -9 $$(cat main.pid) && rm -f main.pid; fi
+	@echo "Processes terminated."
 
 # Clean the build directory
 clean:
 	rm -rf $(BUILD_DIR)
+	rm -f odom.pid main.pid
