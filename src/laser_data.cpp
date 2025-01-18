@@ -1,3 +1,5 @@
+#include "laser_data/laser_data.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
