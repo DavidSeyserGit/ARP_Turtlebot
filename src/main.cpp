@@ -21,49 +21,40 @@ struct OdomData {
 }; //seyser der befehl extern geht nicht auf strukturen, und ich wollte jz nur für das struct keine explizite header datei erstellen deswegen habe ich es hier eins zu eins definiert
 
 extern void SendCmdVel(int port);
-extern OdomData* InitializeSharedMemory(int& shm_fd);
-extern void ProcessAndStoreOdometryData(Client& client, OdomData* odom_data);
 
-/*
-we can use shared_memory  to give a region in memory 
-a name and save our data from the imu and laserscan to this region in memory
+#include "client/client.h"
+#include <atomic>
+#include <iostream>
+#include <stdexcept>
+#include <thread>
+#include <chrono> // For std::this_thread::sleep_for
 
-we can then read this data from python or rust with the same name 
+/**
+ * @file main.cpp
+ * @brief Test application to demonstrate a separate thread.
+ */
 
-we need to use semaphores for this so that we dont clash trying to access the memory
-at the same time
-*/
+extern void SendCmdVel(int port);
 
 int main() {
-    /*
-    try
-    {
-        SendCmdVel(9999);
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    
-    try
-    {
-        Client client(9998);
-        while(1){
-            try {
-                std::string received_data = client.ReceiveData();
 
-                std::cout << received_data << std::endl;
-
-            } catch (const std::runtime_error& e) {
-                
-                std::cerr << "Error: " << e.what() << std::endl;
-                return 1; 
-            }
+        if (cmd_vel_thread.joinable()) {
+            std::cout << "SendCmdVel started in a separate thread." << std::endl;
+            cmd_vel_thread.detach(); // Detach the thread to run independently
         }
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
+
+        // Main thread task: Print a counter
+        int counter = 0;
+        while (counter < 10) {
+            std::cout << "Main thread counter: " << counter++ << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1)); // Simulate work in the main thread
+        }
+
+        std::cout << "Main thread finished its task." << std::endl;
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
     }
 
     return 0;
