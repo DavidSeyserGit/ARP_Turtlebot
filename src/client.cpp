@@ -18,7 +18,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-const std::string Client::kServerIp_ = "192.168.100.51";
+const std::string Client::kServerIp_ = "127.0.0.1";
 
 /**
  * @brief Constructs a Client object and connects to the server.

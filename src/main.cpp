@@ -14,6 +14,11 @@
  * @note This is a test program and is not intended for production use.
  * It runs an infinite loop and lacks advanced error handling or resource management.
  */
+struct OdomData {
+    float x;
+    float y;
+    float theta;
+}; //seyser der befehl extern geht nicht auf strukturen, und ich wollte jz nur für das struct keine explizite header datei erstellen deswegen habe ich es hier eins zu eins definiert
 
 extern void SendCmdVel(int port);
 
@@ -32,9 +37,6 @@ extern void SendCmdVel(int port);
 extern void SendCmdVel(int port);
 
 int main() {
-    try {
-        // Launch SendCmdVel in a separate thread
-        std::thread cmd_vel_thread(SendCmdVel, 9997);
 
         if (cmd_vel_thread.joinable()) {
             std::cout << "SendCmdVel started in a separate thread." << std::endl;
@@ -56,4 +58,18 @@ int main() {
     }
 
     return 0;
+    */
+   	Client client(9998);
+    int shm_fd;
+    OdomData* odom_data = InitializeSharedMemory(shm_fd);
+    while(true){
+    ProcessAndStoreOdometryData(client, odom_data);
+    }
+    /*Cleanup shared memory
+    munmap(odom_data, kSharedMemorySize);
+    close(shm_fd);
+    shm_unlink("/my_shared_memory");
+
+    return 0;*/
+
 }
