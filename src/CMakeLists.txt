@@ -8,3 +8,6 @@ add_executable(odom odometry.cpp client.cpp)
 # Include directories for headers
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_include_directories(odom PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+target_link_libraries(odom rt)
+target_link_libraries(main rt)
