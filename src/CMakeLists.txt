@@ -9,5 +9,11 @@ add_executable(odom odometry.cpp client.cpp)
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_include_directories(odom PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries(odom rt)
-target_link_libraries(main rt)
+# Conditionally link libraries based on the platform
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    # On Linux, link with rt for POSIX shared memory
+    target_link_libraries(odom rt)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    # On macOS, no additional linking is needed for shared memory
+    message(STATUS "Building on macOS - librt not required")
+endif()
