@@ -61,7 +61,7 @@ void create_map(ondemand::array &ranges, const int px_height, const int px_width
 
         int index = 0;
 
-        while (sqrt(pow(xerw * meters_per_pixel * index, 2) + pow(yerw * meters_per_pixel * index,2)) <= sqrt(pow(xr, 2) + pow(yr, 2))) // If the length of the vector from the robot base to the measured point in world coordinates is less than the length of the vector from the robot base to the measured point in robot coordinates
+        while (sqrt(pow(xerw * meters_per_pixel * index, 2) + pow(yerw * meters_per_pixel * index, 2)) <= sqrt(pow(xr, 2) + pow(yr, 2))) // If the length of the vector from the robot base to the measured point in world coordinates is less than the length of the vector from the robot base to the measured point in robot coordinates
         {
             pxrw = int((xerw * meters_per_pixel * index + Tx_robot) * pixels_per_meter + px_offset); // Convert world coordinates to pixel coordinates
             pyrw = int((yerw * meters_per_pixel * index + Ty_robot) * pixels_per_meter + py_offset); // Convert world coordinates to pixel coordinates
