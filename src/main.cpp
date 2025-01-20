@@ -71,7 +71,7 @@ int main()
                 // Access ranges array
                 ondemand::array ranges = data["ranges"];
                 
-                create_map(ranges, px_height, px_width, 144, 0.0, i, 0.0);
+                create_map(ranges, px_height, px_width, 144, 0.0,i, i*2);
             }
 
             catch (const std::runtime_error &e)
