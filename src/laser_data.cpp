@@ -41,7 +41,7 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
     int pyrw;                                        // Y coordinate of a point along the xrw yrw vector in pixel coordinates
 
     // cv::Mat img = cv::Mat::zeros(px_height, px_width, CV_8UC1);
-    cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 100;
+    static cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 100;
 
     int i = 0;
     for (auto range : ranges)
