@@ -49,7 +49,6 @@ int main()
 
     const int px_height = 720;
     const int px_width = 1080;
-    std::vector<std::vector<float>> pixel_array(px_width, std::vector<float>(px_height, 1.0));
     float i=0.0;
 
     try
@@ -62,11 +61,6 @@ int main()
             {
                 std::string received_data = client.ReceiveData();
 
-                // std::cout << received_data[0] << received_data[1] << received_data[2] << received_data[3] << received_data[4] << received_data[5] << received_data[6] << received_data[7] << received_data[8] << received_data[9] << received_data[10] << std::endl;
-
-                // Include data evaluation for Laserscan
-
-                // std::stringstream buffer;
                 // Extract JSON content
                 std::string json_content = extract_json(received_data);
 
@@ -77,32 +71,7 @@ int main()
                 // Access ranges array
                 ondemand::array ranges = data["ranges"];
                 
-                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 144, 0.0, i, 0.0);
-                // std::cout << "Next ITERATION" << std::endl;
-                /*
-                for(auto row : pixel_array)
-                {
-                    for(auto pixel : row)
-                    {
-                        std::cout << pixel << " ";
-                    }
-                    std::cout << std::endl;
-                }
-
-                
-                std::cout << "Ranges: " << std::endl;
-
-                size_t count = 0;
-                for (auto dist : ranges)
-                {
-                    std::cout << double(dist) << std::endl;
-                    count++;
-                }
-
-                std::cout << "Number of ranges: " << count << std::endl;
-
-                sleep(1);
-                */
+                create_map(ranges, px_height, px_width, 144, 0.0, i, 0.0);
             }
 
             catch (const std::runtime_error &e)

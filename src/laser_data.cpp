@@ -21,7 +21,7 @@ std::string extract_json(const std::string &text)
     return text.substr(start, end - start);
 }
 
-void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &pixel_array, const int px_height, const int px_width, float pixels_per_meter, float Tx_robot, float Ty_robot, float R_robot)
+void create_map(ondemand::array &ranges, const int px_height, const int px_width, float pixels_per_meter, float Tx_robot, float Ty_robot, float R_robot)
 {
 
     float meters_per_pixel = 1.0 / pixels_per_meter; // Calculate the number of meters per pixel
@@ -40,8 +40,7 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
     int pxrw;                                        // X coordinate of a point along the xrw yrw vector in pixel coordinates
     int pyrw;                                        // Y coordinate of a point along the xrw yrw vector in pixel coordinates
 
-    // cv::Mat img = cv::Mat::zeros(px_height, px_width, CV_8UC1);
-    static cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 100;
+    static cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 100; // Create a grey canvas (unknown space) which will be overwritten with the laser scan
 
     int i = 0;
     for (auto range : ranges)
@@ -65,20 +64,14 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         {
             pxrw = int((xerw * meters_per_pixel * index + Tx_robot) * pixels_per_meter + px_offset); // Convert world coordinates to pixel coordinates
             pyrw = int((yerw * meters_per_pixel * index + Ty_robot) * pixels_per_meter + py_offset); // Convert world coordinates to pixel coordinates
-            // img.at<uchar>(pyrw, pxrw) = 0;
-            cv::circle(img, cv::Point(pxrw, pyrw), 2, cv::Scalar(255), -1);
-
-            std::cout << "Free space created" << std::endl;
-
+            cv::circle(img, cv::Point(pxrw, pyrw), 2, cv::Scalar(255), -1);                          // Create white pixels along the laser scan for free space
             index++;
         }
         index = 0;
 
         if (px >= 0 && px < px_width && py >= 0 && py < px_height)
         {
-            pixel_array[px][py] = 0.0; // Set the pixel value to 0.0 if the point is within the image boundaries
-            // img.at<uchar>(py, px) = 0;
-            cv::circle(img, cv::Point(px, py), 2, cv::Scalar(0), -1);
+            cv::circle(img, cv::Point(px, py), 2, cv::Scalar(0), -1); // Create a black pixel for the obstacle
         }
         else
         {
@@ -88,10 +81,8 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         i++;
     }
 
-    // cv::Mat img(px_height, px_width, CV_16U, pixel_array.data());
-    
     cv::imshow("Laser scan", img);
-    
+
     cv::waitKey(1);
 }
 /*
