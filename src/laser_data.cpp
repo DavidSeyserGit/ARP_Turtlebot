@@ -32,6 +32,9 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
     float xr;                      // X coordinate of a measured point in robot coordinates
     float yr;                      // Y coordinate of a measured point in robot coordinates
 
+    // cv::Mat img = cv::Mat::zeros(px_height, px_width, CV_8UC1);
+    cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 255;
+
     int i = 0;
     for (auto range : ranges)
     {
@@ -48,6 +51,8 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         if (px >= 0 && px < px_width && py >= 0 && py < px_height)
         {
             pixel_array[px][py] = 0.0; // Set the pixel value to 0.0 if the point is within the image boundaries
+            // img.at<uchar>(py, px) = 0;
+            cv::circle(img, cv::Point(px, py), 2, cv::Scalar(0), -1);
         }
         else
         {
@@ -57,7 +62,8 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         i++;
     }
 
-    cv::Mat img(px_height, px_width, CV_8U, pixel_array.data());
+    // cv::Mat img(px_height, px_width, CV_16U, pixel_array.data());
+    
     cv::imshow("Laser scan", img);
     cv::waitKey(1);
 }
