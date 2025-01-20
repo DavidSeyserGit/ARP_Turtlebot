@@ -50,6 +50,7 @@ int main()
     const int px_height = 720;
     const int px_width = 1080;
     std::vector<std::vector<float>> pixel_array(px_width, std::vector<float>(px_height, 1.0));
+    float i=0.0;
 
     try
     {
@@ -75,9 +76,8 @@ int main()
 
                 // Access ranges array
                 ondemand::array ranges = data["ranges"];
-
-
-                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 144, 0.0, 0.0, 0.0);
+                
+                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 144, 0.0, i, 0.0);
                 // std::cout << "Next ITERATION" << std::endl;
                 /*
                 for(auto row : pixel_array)
@@ -111,7 +111,9 @@ int main()
                 std::cerr << "Error: " << e.what() << std::endl;
                 return 1;
             }
-            sleep(1);
+
+            i+=0.01;
+            usleep(100000);
         }
     }
     catch (const std::exception &e)

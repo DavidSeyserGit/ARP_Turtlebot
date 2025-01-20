@@ -61,7 +61,7 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         py = int(yw * pixels_per_meter + py_offset);           // Convert world coordinates to pixel coordinates
 
         int index = 0;
-        while (abs(xerw * meters_per_pixel * index + Tx_robot) <= abs(xw) && abs(yerw * meters_per_pixel * index + Ty_robot) <= abs(yw))
+        while (abs(xerw * meters_per_pixel * index) <= abs(xr) && abs(yerw * meters_per_pixel * index) <= abs(yr) || index > 1000)
         {
             pxrw = int((xerw * meters_per_pixel * index + Tx_robot) * pixels_per_meter + px_offset); // Convert world coordinates to pixel coordinates
             pyrw = int((yerw * meters_per_pixel * index + Ty_robot) * pixels_per_meter + py_offset); // Convert world coordinates to pixel coordinates
@@ -89,8 +89,9 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
     }
 
     // cv::Mat img(px_height, px_width, CV_16U, pixel_array.data());
-
+    
     cv::imshow("Laser scan", img);
+    
     cv::waitKey(1);
 }
 /*
