@@ -61,7 +61,7 @@ int main()
             {
                 std::string received_data = client.ReceiveData();
 
-                std::cout << received_data[0] << received_data[1] << received_data[2] << received_data[3] << received_data[4] << received_data[5] << received_data[6] << received_data[7] << received_data[8] << received_data[9] << received_data[10] << std::endl;
+                // std::cout << received_data[0] << received_data[1] << received_data[2] << received_data[3] << received_data[4] << received_data[5] << received_data[6] << received_data[7] << received_data[8] << received_data[9] << received_data[10] << std::endl;
 
                 // Include data evaluation for Laserscan
 
@@ -77,8 +77,8 @@ int main()
                 ondemand::array ranges = data["ranges"];
 
 
-                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 0.0, 0.0, 0.0);
-                std::cout << "Next ITERATION" << std::endl;
+                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 144, 0.0, 0.0, 0.0);
+                // std::cout << "Next ITERATION" << std::endl;
                 /*
                 for(auto row : pixel_array)
                 {

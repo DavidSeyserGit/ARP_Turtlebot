@@ -12,6 +12,6 @@
 using namespace simdjson;
 
 std::string extract_json(const std::string& text);
-void calc_pixel_coord(simdjson::ondemand::array &ranges, std::vector<std::vector<float>> &pixel_array, const int px_height, const int px_width, float Tx_robot, float Ty_robot, float R_robot);
+void calc_pixel_coord(simdjson::ondemand::array &ranges, std::vector<std::vector<float>> &pixel_array, const int px_height, const int px_width, float pixels_per_meter, float Tx_robot, float Ty_robot, float R_robot);
 
 #endif // LASER_DATA_H

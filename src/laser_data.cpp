@@ -21,19 +21,27 @@ std::string extract_json(const std::string &text)
     return text.substr(start, end - start);
 }
 
-void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &pixel_array, const int px_height, const int px_width, float Tx_robot, float Ty_robot, float R_robot)
+void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &pixel_array, const int px_height, const int px_width, float pixels_per_meter, float Tx_robot, float Ty_robot, float R_robot)
 {
-    int px;                        // X coordinate of a measured point in pixel coordinates
-    int py;                        // Y coordinate of a measured point in pixel coordinates
-    int px_offset = px_width / 2;  // Offset of the X coordinate in pixel coordinates to put robot in the center
-    int py_offset = px_height / 2; // Offset of the Y coordinate in pixel coordinates to put robot in the center
-    float xw;                      // X coordinate of a measured point in world coordinates
-    float yw;                      // Y coordinate of a measured point in world coordinates
-    float xr;                      // X coordinate of a measured point in robot coordinates
-    float yr;                      // Y coordinate of a measured point in robot coordinates
+
+    float meters_per_pixel = 1.0 / pixels_per_meter; // Calculate the number of meters per pixel
+    int px;                                          // X coordinate of a measured point in pixel coordinates
+    int py;                                          // Y coordinate of a measured point in pixel coordinates
+    int px_offset = px_width / 2;                    // Offset of the X coordinate in pixel coordinates to put robot in the center
+    int py_offset = px_height / 2;                   // Offset of the Y coordinate in pixel coordinates to put robot in the center
+    float xw;                                        // X coordinate of a measured point in world coordinates
+    float yw;                                        // Y coordinate of a measured point in world coordinates
+    float xr;                                        // X coordinate of a measured point in robot coordinates
+    float yr;                                        // Y coordinate of a measured point in robot coordinates
+    float xrw;                                       // X element of the vector from the robot base to a measured point in world coordinates
+    float yrw;                                       // Y element of the vector from the robot base to a measured point in world coordinates
+    float xerw;                                      // X element of the unit vector from the robot base to a measured point in world coordinates
+    float yerw;                                      // Y element of the unit vector from the robot base to a measured point in world coordinates
+    int pxrw;                                        // X coordinate of a point along the xrw yrw vector in pixel coordinates
+    int pyrw;                                        // Y coordinate of a point along the xrw yrw vector in pixel coordinates
 
     // cv::Mat img = cv::Mat::zeros(px_height, px_width, CV_8UC1);
-    cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 255;
+    cv::Mat img = cv::Mat::ones(px_height, px_width, CV_8UC1) * 100;
 
     int i = 0;
     for (auto range : ranges)
@@ -45,8 +53,26 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
         yr = float(range) * sin(i * M_PI / 180);               // Convert polar coordinates to Cartesian coordinates
         xw = xr * cos(R_robot) - yr * sin(R_robot) + Tx_robot; // Convert robot coordinates to world coordinates
         yw = xr * sin(R_robot) + yr * cos(R_robot) + Ty_robot; // Convert robot coordinates to world coordinates
-        px = int(xw * 144 + px_offset);                        // Convert world coordinates to pixel coordinates
-        py = int(yw * 144 + py_offset);                        // Convert world coordinates to pixel coordinates
+        xrw = xw - Tx_robot;                                   // Calculate the vector from the robot base to the measured point in world coordinates
+        yrw = yw - Ty_robot;                                   // Calculate the vector from the robot base to the measured point in world coordinates
+        xerw = xrw / sqrt(xrw * xrw + yrw * yrw);              // Calculate the unit vector from the robot base to the measured point in world coordinates
+        yerw = yrw / sqrt(xrw * xrw + yrw * yrw);              // Calculate the unit vector from the robot base to the measured point in world coordinates
+        px = int(xw * pixels_per_meter + px_offset);           // Convert world coordinates to pixel coordinates
+        py = int(yw * pixels_per_meter + py_offset);           // Convert world coordinates to pixel coordinates
+
+        int index = 0;
+        while (abs(xerw * meters_per_pixel * index + Tx_robot) <= abs(xw) && abs(yerw * meters_per_pixel * index + Ty_robot) <= abs(yw))
+        {
+            pxrw = int((xerw * meters_per_pixel * index + Tx_robot) * pixels_per_meter + px_offset); // Convert world coordinates to pixel coordinates
+            pyrw = int((yerw * meters_per_pixel * index + Ty_robot) * pixels_per_meter + py_offset); // Convert world coordinates to pixel coordinates
+            // img.at<uchar>(pyrw, pxrw) = 0;
+            cv::circle(img, cv::Point(pxrw, pyrw), 2, cv::Scalar(255), -1);
+
+            std::cout << "Free space created" << std::endl;
+
+            index++;
+        }
+        index = 0;
 
         if (px >= 0 && px < px_width && py >= 0 && py < px_height)
         {
@@ -63,7 +89,7 @@ void calc_pixel_coord(ondemand::array &ranges, std::vector<std::vector<float>> &
     }
 
     // cv::Mat img(px_height, px_width, CV_16U, pixel_array.data());
-    
+
     cv::imshow("Laser scan", img);
     cv::waitKey(1);
 }
