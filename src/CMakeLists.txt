@@ -2,6 +2,8 @@
 #later the other files need to be added here too -> main will be the visualisation file.
 add_executable(main main.cpp client.cpp cmd_vel.cpp laser_data.cpp simdjson.cpp) #add laserscaner and imu data
 
+find_package (OpenCV REQUIRED)
+
 # Include directories for headers
 target_include_directories(main PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(main PRIVATE ${OpenCV_LIBS})

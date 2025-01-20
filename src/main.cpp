@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <thread>
 #include "laser_data/laser_data.h"
+#include <vector>
+
 
 /**
  * @file main.cpp
@@ -45,23 +47,23 @@ int main()
     //     std::cerr << e.what() << '\n';
     // }
 
+    const int px_height = 720;
+    const int px_width = 1080;
+    std::vector<std::vector<float>> pixel_array(px_width, std::vector<float>(px_height, 1.0));
+
     try
     {
-        Client client(9997);
+        // Client client(9997);
+        Client client(8080);
         while (1)
         {
             try
             {
                 std::string received_data = client.ReceiveData();
 
-                std::cout << received_data[0] << received_data[1] << received_data[2] << 
-                received_data[3] <<  received_data[4] << received_data[5] <<
-                received_data[6] << received_data[7] << received_data[8] <<
-                received_data[9] << received_data[10] <<
-                std::endl;
+                std::cout << received_data[0] << received_data[1] << received_data[2] << received_data[3] << received_data[4] << received_data[5] << received_data[6] << received_data[7] << received_data[8] << received_data[9] << received_data[10] << std::endl;
 
                 // Include data evaluation for Laserscan
-
 
                 // std::stringstream buffer;
                 // Extract JSON content
@@ -74,6 +76,20 @@ int main()
                 // Access ranges array
                 ondemand::array ranges = data["ranges"];
 
+
+                calc_pixel_coord(ranges, pixel_array, px_height, px_width, 0.0, 0.0, 0.0);
+                std::cout << "Next ITERATION" << std::endl;
+                /*
+                for(auto row : pixel_array)
+                {
+                    for(auto pixel : row)
+                    {
+                        std::cout << pixel << " ";
+                    }
+                    std::cout << std::endl;
+                }
+
+                
                 std::cout << "Ranges: " << std::endl;
 
                 size_t count = 0;
@@ -86,14 +102,8 @@ int main()
                 std::cout << "Number of ranges: " << count << std::endl;
 
                 sleep(1);
-
-
+                */
             }
-
-
-
-
-
 
             catch (const std::runtime_error &e)
             {
@@ -101,6 +111,7 @@ int main()
                 std::cerr << "Error: " << e.what() << std::endl;
                 return 1;
             }
+            sleep(1);
         }
     }
     catch (const std::exception &e)
