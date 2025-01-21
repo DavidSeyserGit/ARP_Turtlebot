@@ -26,8 +26,8 @@
     #include <unistd.h>
 #endif
 
-// const std::string Client::kServerIp_ = "192.168.100.51";
-const std::string Client::kServerIp_ = "192.168.0.202";
+const std::string Client::kServerIp_ = "192.168.100.51";
+// const std::string Client::kServerIp_ = "192.168.0.202";
 
 /**
  * @brief Constructs a Client object and connects to the server.

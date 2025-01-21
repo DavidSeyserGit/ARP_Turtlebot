@@ -10,11 +10,12 @@ using namespace simdjson;
 std::string extract_json(const std::string &text)
 {
     size_t start = text.find("---START---");
-    size_t end = text.find("---END---");
+    size_t end = text.find("___END___");
 
     if (start == std::string::npos || end == std::string::npos)
     {
-        throw std::runtime_error("Invalid format: Missing ---START--- or ---END---");
+        // throw std::runtime_error("Invalid format: Missing ---START--- or ___END___");
+        std::cout << "Invalid format: Missing ---START--- or ___END___" << std::endl;
     }
 
     start += std::string("---START---").length();

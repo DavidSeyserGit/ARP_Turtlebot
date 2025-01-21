@@ -7,7 +7,6 @@
 #include "laser_data/laser_data.h"
 #include <vector>
 
-
 /**
  * @file main.cpp
  * @brief A simple test application to demonstrate client-server communication.
@@ -49,29 +48,37 @@ int main()
 
     const int px_height = 720;
     const int px_width = 1080;
-    float i=0.0;
+    float i = 0.0;
 
     try
     {
-        // Client client(9997);
-        Client client(8080);
+        Client client(9997);
+        // Client client(8080);
         while (1)
         {
             try
             {
-                std::string received_data = client.ReceiveData();
+                try
+                {
+                    std::string received_data = client.ReceiveData();
 
-                // Extract JSON content
-                std::string json_content = extract_json(received_data);
+                    // Extract JSON content
+                    std::string json_content = extract_json(received_data);
 
-                // Parse the JSON content
-                ondemand::parser parser;
-                ondemand::document data = parser.iterate(json_content);
+                    // Parse the JSON content
+                    ondemand::parser parser;
+                    ondemand::document data = parser.iterate(json_content);
 
-                // Access ranges array
-                ondemand::array ranges = data["ranges"];
-                
-                create_map(ranges, px_height, px_width, 144, 0.0,i, i*2);
+                    // Access ranges array
+                    ondemand::array ranges = data["ranges"];
+
+                    create_map(ranges, px_height, px_width, 144, 0.0, 0.0, 0.0);
+                    sleep(1);
+                }
+                catch (...)
+                {
+
+                }
             }
 
             catch (const std::runtime_error &e)
@@ -81,7 +88,7 @@ int main()
                 return 1;
             }
 
-            i+=0.01;
+            i += 0.01;
             usleep(100000);
         }
     }
