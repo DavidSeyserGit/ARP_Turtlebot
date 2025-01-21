@@ -1,7 +1,7 @@
 BUILD_DIR = build
 TEST_BIN = $(BUILD_DIR)/test
 ODOM_BIN = $(BUILD_DIR)/src/odom
-MAIN_BIN = $(BUILD_DIR)/src/main
+CMD_VEL_BIN = $(BUILD_DIR)/src/cmd_vel
 
 .PHONY: all test run_main run_all stop clean
 
@@ -34,7 +34,7 @@ run_all: all
 	@$(ODOM_BIN) & echo $$! > odom.pid
 	@sleep 2 # Give odom time to initialize shared memory
 	@echo "Running main..."
-	@$(MAIN_BIN) & echo $$! > main.pid
+	@$(CMD_VEL_BIN) & echo $$! > cmd_vel.pid
 	@echo "Both odom and main are running. Use 'make stop' to terminate."
 
 # Stop both odom and main
@@ -47,4 +47,4 @@ stop:
 # Clean the build directory
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -f odom.pid main.pid
+	rm -f odom.pid cmd_vel.pid

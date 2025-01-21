@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <errno.h> // Make sure to include errno
 
-const std::string Client::kServerIp_ = "127.0.0.1";
+const std::string Client::kServerIp_ = "192.168.100.51";
 
 Client::Client(int port) : server_port_(port), socket_fd_(-1) { // Initialize socket_fd_
     ConnectToServer();

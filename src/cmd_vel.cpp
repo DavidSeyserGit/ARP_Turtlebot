@@ -12,7 +12,7 @@
 #include <sys/socket.h>
 
 void SendCmdVel(int port) {
-    const std::string kServerIp_ = "127.0.0.1";
+    const std::string kServerIp_ = "192.168.100.51";
     const std::string shm_name = "/odom_data";
 
     // Open shared memory
@@ -103,4 +103,8 @@ void SendCmdVel(int port) {
     if (close(shm_fd) == -1) {
         perror("close shm_fd failed");
     }
+}
+
+int main(){
+    SendCmdVel(9999);
 }
