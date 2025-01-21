@@ -6,44 +6,94 @@
 #include "odom.h"
 #include "client/client.h"
 #include <thread>
+#include "laser_data/laser_data.h"
+#include <vector>
+/**
+ * @file main.cpp
+ * @brief A simple test application to demonstrate client-server communication.
+ *
+ * This program is designed to test the connection between a client and a server.
+ * It continuously receives data from the server and prints it to the console.
+ *
+ * @note This is a test program and is not intended for production use.
+ * It runs an infinite loop and lacks advanced error handling or resource management.
+ */
 
-constexpr char kSharedMemoryName[] = "/odom_data";
-void SendCmdVel(int port);
-int main() {
-    /*
-    try {
-        std::cout << "Starting main function..." << std::endl;
+extern void SendCmdVel(int port);
+extern bool CreateSharedMemory(const std::string &name, size_t size, void *&memory);
+extern bool AttachSharedMemory(const std::string &name, size_t size, void *&memory);
+extern void DetachSharedMemory(void *memory, size_t size);
+extern void DestroySharedMemory(const std::string &name);
 
-        // Shared memory setup
-        int shm_fd;
-        OdomData* odom_data = InitializeSharedMemory(shm_fd);
-        if (!odom_data) {
-            throw std::runtime_error("Failed to initialize shared memory");
+/*
+we can use shared_memory  to give a region in memory
+a name and save our data from the imu and laserscan to this region in memory
+
+we can then read this data from python or rust with the same name
+
+we need to use semaphores for this so that we dont clash trying to access the memory
+at the same time
+*/
+
+int main()
+{
+
+    // try
+    // {
+    //     SendCmdVel(9999);
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
+
+    const int px_height = 720;
+    const int px_width = 1080;
+    float i = 0.0;
+
+    try
+    {
+        Client client(9997);
+        // Client client(8080);
+        while (1)
+        {
+            try
+            {
+                try
+                {
+                    std::string received_data = client.ReceiveData();
+
+                    // Extract JSON content
+                    std::string json_content = extract_json(received_data);
+
+                    // Parse the JSON content
+                    ondemand::parser parser;
+                    ondemand::document data = parser.iterate(json_content);
+
+                    // Access ranges array
+                    ondemand::array ranges = data["ranges"];
+
+                    create_map(ranges, px_height, px_width, 144, 0.0, 0.0, 0.0);
+                    sleep(1);
+                }
+                catch (...)
+                {
+
+                }
+            }
+
+            catch (const std::runtime_error &e)
+            {
+
+                std::cerr << "Error: " << e.what() << std::endl;
+                return 1;
+            }
+
+            i += 0.01;
+            usleep(100000);
         }
-        // Client setup
-        Client odomClient(9998);
-        // Process and store odometry data
-        ProcessAndStoreOdometryData(odomClient, odom_data);
-        std::cout << "Odometry Data: x=" << odom_data->x
-                << ", y=" << odom_data->y
-                << ", theta=" << odom_data->theta << std::endl;
-
-        // Simulate delay
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-
-        std::cout << "Main function finished." << std::endl;
-
-        // Cleanup shared resources
-        munmap(odom_data, sizeof(OdomData));
-        close(shm_fd);
-        shm_unlink(kSharedMemoryName);
-
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
     }
-    */
-
-    SendCmdVel(9999);
-    return 0;
-}
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what() << '\n';
+    }
