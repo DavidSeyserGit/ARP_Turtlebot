@@ -1,125 +1,75 @@
-/**
- * @file client.cpp
- * @brief Implementation of the Client class for TCP communication.
- * 
- * This file contains the implementation of the Client class methods, which
- * allows connecting to a server with a fixed IP and receiving data as a string.
- */
-
 #include "../include/client/client.h"
 #include <iostream>
 #include <cstring>
 #include <stdexcept>
-/*
-    most implementations are in kernel-space and therefore
-    OS-specific code needs to be written
-    windows has winsock and unix-based systems can use arap/inet
-*/
-#ifdef _WIN32
-    #include <winsock2.h>
-    #include <ws2tcpip.h>
-    #pragma comment(lib, "Ws2_32.lib")
-    #pragma comment (lib, "Mswsock.lib")
-    #pragma comment (lib, "AdvApi32.lib")
-#else
-    #include <arpa/inet.h>
-    #include <unistd.h>
-#endif
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <errno.h> // Make sure to include errno
 
 const std::string Client::kServerIp_ = "192.168.100.51";
 // const std::string Client::kServerIp_ = "192.168.0.202";
 
-/**
- * @brief Constructs a Client object and connects to the server.
- * 
- * @param port The port number to connect to.
- */
-
-Client::Client(int port) : server_port_(port){
+Client::Client(int port) : server_port_(port), socket_fd_(-1) { // Initialize socket_fd_
     ConnectToServer();
 }
 
-/**
- * @brief Destroys the Client object and closes the connection.
- */
-Client::~Client(){
+Client::~Client() {
     CloseConnection();
 }
 
-/**
- * @brief Establishes a connection to the server.
- * 
- * This function initializes the socket, defines the server address, and
- * establishes a connection to the server using the fixed IP and provided port.
- * 
- * @throw std::runtime_error If the socket creation, address assignment, or
- * connection fails.
- */
-void Client::ConnectToServer(){
-#ifdef _WIN32 //if windows is the operating system, windows dll's are used that are nativly installed on windows
-    WSADATA wsaData;
-    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-        throw std::runtime_error("WSAStartup failed");
-        exit(EXIT_FAILURE);
-    }
-#endif
-    socket_fd_ = 
-#ifdef _WIN32
-        socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-#else
-        socket(AF_INET, SOCK_STREAM, 0);
-#endif
-    if (socket_fd_ < 0){
-        throw std::runtime_error("Failed to create socket"); //critical error, throw an execption
+void Client::ConnectToServer() {
+    socket_fd_ = socket(AF_INET, SOCK_STREAM, 0);
+    if (socket_fd_ < 0) {
+        throw std::runtime_error("Failed to create socket: " + std::string(strerror(errno)));
     }
 
-    //this section is already system-independent because windows and unix use Berkley Sockets API
-    sockaddr_in server_adress;
-    std::memset(&server_adress, 0, sizeof(server_adress)); //fill the server_adress with 0's 
+    sockaddr_in server_adress{};
+    std::memset(&server_adress, 0, sizeof(server_adress));
     server_adress.sin_family = AF_INET;
     server_adress.sin_port = htons(server_port_);
 
-    if(inet_pton(AF_INET, kServerIp_.c_str(), &server_adress.sin_addr)<=0){
-        throw std::runtime_error("Invalid server IP adress");
+    if (inet_pton(AF_INET, kServerIp_.c_str(), &server_adress.sin_addr) <= 0) {
+        throw std::runtime_error("Invalid server IP address");
     }
 
-    if (connect(socket_fd_, reinterpret_cast<sockaddr*>(&server_adress), sizeof(server_adress)) < 0){
-        throw std::runtime_error("Can't connect to server");
+    if (connect(socket_fd_, reinterpret_cast<sockaddr*>(&server_adress), sizeof(server_adress)) < 0) {
+        throw std::runtime_error("Can't connect to server: " + std::string(strerror(errno)));
     }
 
-    std::cout << "Succesfully connected to IP adress: " << kServerIp_ << std::endl;
+    std::cout << "Successfully connected to IP address: " << kServerIp_ << std::endl;
 }
 
 void Client::CloseConnection() {
     if (socket_fd_ >= 0) {
-#ifdef _WIN32
-        closesocket(socket_fd_);
-#else
         close(socket_fd_);
-#endif
+        socket_fd_ = -1; // Reset socket_fd_
         std::cout << "Connection closed." << std::endl;
     }
 }
 
-/**
- * @brief Receives data from the server as a string.
- * 
- * This function reads data from the server into a buffer and converts it
- * into a string. The buffer size is fixed at 1024 chars. If the reception
- * fails, an exception is thrown.
- * 
- * @return A string containing the data received from the server.
- * 
- * @throw std::runtime_error If the data reception fails.
- */
-std::string Client::ReceiveData(){
+std::string Client::ReceiveData() {
     constexpr int kBufferSize = 1024000;
     char buffer[kBufferSize];
     std::memset(buffer, 0, kBufferSize);
 
-    size_t bytes_received = recv(socket_fd_, buffer, kBufferSize-1, 0);
-    if(bytes_received < 0){
-        throw std::runtime_error("Failed to receive data");
+    ssize_t bytes_received = recv(socket_fd_, buffer, kBufferSize - 1, 0);
+
+    if (bytes_received < 0) {
+        if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            // No data available yet (non-blocking socket)
+            return ""; // Return empty string
+        } else if (errno == ECONNRESET || errno == ECONNREFUSED || errno == EPIPE) {
+            // Connection closed by server or other network error
+            CloseConnection(); // Important: Close the socket
+            throw std::runtime_error("Connection error: " + std::string(strerror(errno)));
+        } else {
+            throw std::runtime_error("recv failed: " + std::string(strerror(errno)));
+        }
+    } else if (bytes_received == 0) {
+        // Connection gracefully closed by the server
+        CloseConnection();
+        return ""; // Return empty string to indicate disconnection
     }
+
     return std::string(buffer, bytes_received);
 }

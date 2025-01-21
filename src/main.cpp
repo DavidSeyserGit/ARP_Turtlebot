@@ -1,12 +1,13 @@
-#include "client/client.h"
-#include "shared_memory/shared_memory.h"
-#include <atomic>
 #include <iostream>
 #include <stdexcept>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include "odom.h"
+#include "client/client.h"
 #include <thread>
 #include "laser_data/laser_data.h"
 #include <vector>
-
 /**
  * @file main.cpp
  * @brief A simple test application to demonstrate client-server communication.
@@ -96,6 +97,3 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
-
-    return 0;
-}
