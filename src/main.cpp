@@ -47,8 +47,8 @@ int main()
     //     std::cerr << e.what() << '\n';
     // }
 
-    const int px_height = 720;
-    const int px_width = 1080;
+    const int px_height = 1080;
+    const int px_width = 1920;
     float i = 0.0;
 
     try
@@ -61,6 +61,26 @@ int main()
             {
                 try
                 {
+                    const std::string shm_name = "/odom_data";
+
+                    // Open shared memory
+                    int shm_fd = shm_open(shm_name.c_str(), O_RDONLY, 0666);
+                    if (shm_fd < 0)
+                    {
+                        perror("shm_open failed");
+                        throw std::runtime_error("Failed to open shared memory");
+                    }
+
+                    // Map shared memory
+                    void *shm_ptr = mmap(nullptr, sizeof(OdomData), PROT_READ, MAP_SHARED, shm_fd, 0);
+                    if (shm_ptr == MAP_FAILED)
+                    {
+                        perror("mmap failed");
+                        close(shm_fd);
+                        throw std::runtime_error("Failed to map shared memory");
+                    }
+                    OdomData *odomData = static_cast<OdomData *>(shm_ptr);
+
                     std::string received_data = client.ReceiveData();
 
                     // Extract JSON content
@@ -73,12 +93,12 @@ int main()
                     // Access ranges array
                     ondemand::array ranges = data["ranges"];
 
-                    create_map(ranges, px_height, px_width, 144, 0.0, 0.0, 0.0);
+                    create_map(ranges, px_height, px_width, 72, -odomData->y, odomData->x, odomData->theta);
+                    // create_map(ranges, px_height, px_width, 144, 0.0, 0.0, 0.0);
                     sleep(1);
                 }
                 catch (...)
                 {
-
                 }
             }
 

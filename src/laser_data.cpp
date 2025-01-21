@@ -49,8 +49,8 @@ void create_map(ondemand::array &ranges, const int px_height, const int px_width
         if (i >= 360)
             break; // Ensure we do not exceed the array bounds
 
-        xr = float(range) * cos(i * M_PI / 180);               // Convert polar coordinates to Cartesian coordinates
-        yr = float(range) * sin(i * M_PI / 180);               // Convert polar coordinates to Cartesian coordinates
+        yr = -float(range) * cos(i * M_PI / 180);               // Convert polar coordinates to Cartesian coordinates
+        xr = -float(range) * sin(i * M_PI / 180);               // Convert polar coordinates to Cartesian coordinates
         xw = xr * cos(R_robot) - yr * sin(R_robot) + Tx_robot; // Convert robot coordinates to world coordinates
         yw = xr * sin(R_robot) + yr * cos(R_robot) + Ty_robot; // Convert robot coordinates to world coordinates
         xrw = xw - Tx_robot;                                   // Calculate the vector from the robot base to the measured point in world coordinates

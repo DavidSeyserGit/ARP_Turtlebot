@@ -64,14 +64,22 @@ void SendCmdVel(int port) {
 
     // Command sending loop
     char buffer[128];
+    int count_time=0;
+    int sign = 1;
     while (true) {
         // Read data from shared memory
         float x = odomData->x;
         float y = odomData->y;
 
+        if (count_time>10)
+        {
+            count_time=0;
+            sign=sign*-1;
+        }
+        
         // Calculate velocities
-        double linear_velocity = x;
-        double angular_velocity = y;
+        double linear_velocity = sign*0.1;
+        double angular_velocity = 0.5;
 
         // Format message
         int message_length = std::snprintf(buffer, sizeof(buffer),
@@ -93,6 +101,7 @@ void SendCmdVel(int port) {
 
         // Sleep before sending the next command
         std::this_thread::sleep_for(std::chrono::seconds(1));
+        count_time++;
     }
 
     // Cleanup
@@ -103,6 +112,8 @@ void SendCmdVel(int port) {
     if (close(shm_fd) == -1) {
         perror("close shm_fd failed");
     }
+    
+    
 }
 
 int main(){
