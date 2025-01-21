@@ -4,9 +4,9 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include "odom.h"
-#include "client/client.h"
+#include "../include/client/client.h"
 #include <thread>
-#include "laser_data/laser_data.h"
+#include "../include/laser_data/laser_data.h"
 #include <vector>
 /**
  * @file main.cpp
@@ -97,3 +97,4 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
+}

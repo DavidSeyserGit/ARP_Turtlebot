@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "simdjson/simdjson.h"
+#include "../simdjson/simdjson.h"
 #include <cmath>
 #include <vector>
 #include <opencv2/opencv.hpp>

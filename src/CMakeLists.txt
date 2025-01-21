@@ -1,9 +1,16 @@
 # Add executable for the main application
 
 #later the other files need to be added here too -> main will be the visualisation file.
-add_executable(main main.cpp client.cpp cmd_vel.cpp laser_data.cpp simdjson.cpp) #add laserscaner and imu data
+add_executable(main main.cpp client.cpp laser_data.cpp simdjson.cpp) #add laserscaner and imu data
 
 find_package (OpenCV REQUIRED)
+
+# Add OpenCV include directories
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+# Link OpenCV libraries to main application
+target_link_libraries(main ${OpenCV_LIBS})
+
 add_executable(cmd_vel client.cpp cmd_vel.cpp) #add laserscaner and imu data
 add_executable(odom odometry.cpp client.cpp)
 

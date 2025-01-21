@@ -1,9 +1,9 @@
-#include "laser_data/laser_data.h"
+#include "../include/laser_data/laser_data.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "simdjson/simdjson.h"
+#include "../include/simdjson/simdjson.h"
 
 using namespace simdjson;
 

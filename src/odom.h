@@ -1,7 +1,7 @@
 #ifndef ODOMETRY_H_
 #define ODOMETRY_H_
 
-#include "client/client.h" // Ensure Client is defined or forward-declared
+#include "../include/client/client.h" // Ensure Client is defined or forward-declared
 
 struct OdomData {
     float x;
