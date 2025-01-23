@@ -11,11 +11,15 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-
 void LinearController(const OdomData* odomData, double& linear_velocity, double& angular_velocity) {
-    // Target position and orientation
+        
+    /*
+        Returns linear and angular velocities to reach
+        :param kind: odomData
+        :type kind: void
+    */
     constexpr float target_x = 1.0; // Replace with your desired target x
-    constexpr float target_y =0.0; // Replace with your desired target y
+    constexpr float target_y = 0.0; // Replace with your desired target y
     constexpr float target_theta = 0.0; // Replace with your desired target orientation
 
     // Calculate errors
@@ -140,8 +144,6 @@ void SendCmdVel(int port) {
     if (close(shm_fd) == -1) {
         perror("close shm_fd failed");
     }
-    
-    
 }
 
 int main(){
