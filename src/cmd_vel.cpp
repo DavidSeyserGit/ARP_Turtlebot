@@ -11,8 +11,49 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
+
+void LinearController(const OdomData* odomData, double& linear_velocity, double& angular_velocity) {
+    // Target position and orientation
+    constexpr float target_x = 4.0; // Replace with your desired target x
+    constexpr float target_y = 0.0; // Replace with your desired target y
+    constexpr float target_theta = 0.0; // Replace with your desired target orientation
+
+    // Calculate errors
+    float delta_x = target_x - odomData->x;
+    float delta_y = target_y - odomData->y;
+    float delta_theta = target_theta - odomData->theta;
+
+    // Calculate control parameters
+    float rho = std::sqrt(delta_x * delta_x + delta_y * delta_y);
+    float alpha = -odomData->theta + std::atan2(delta_y, delta_x);
+    float beta = delta_theta - alpha;
+
+    // Normalize angles to [-PI, PI]
+    while (alpha > M_PI) alpha -= 2 * M_PI;
+    while (alpha < -M_PI) alpha += 2 * M_PI;
+
+    while (beta > M_PI) beta -= 2 * M_PI;
+    while (beta < -M_PI) beta += 2 * M_PI;
+
+    // Control gains
+    constexpr float k_rho = 0.7;  // Gain for linear velocity
+    constexpr float k_alpha = 1; // Gain for alpha (heading correction)
+    constexpr float k_beta = -0.5; // Gain for beta (orientation correction)
+
+    // Compute velocities
+    linear_velocity = k_rho * rho;
+    angular_velocity = k_alpha * alpha + k_beta * beta;
+
+    // Stop moving if close enough to the target
+    if (rho < 0.25) {
+        linear_velocity = 0.0;
+        angular_velocity = 0.0;
+    }
+    std::cout << linear_velocity << " " << rho << " " << std::endl;
+}
+
 void SendCmdVel(int port) {
-    const std::string kServerIp_ = "192.168.100.51";
+    const std::string kServerIp_ = "192.168.100.55";
     const std::string shm_name = "/odom_data";
 
     // Open shared memory
@@ -62,25 +103,12 @@ void SendCmdVel(int port) {
         throw std::runtime_error("Connection failed");
     }
 
-    // Command sending loop
+    double linear_velocity = 0;
+    double angular_velocity = 0;
     char buffer[128];
-    int count_time=0;
-    int sign = 1;
     while (true) {
-        // Read data from shared memory
-        float x = odomData->x;
-        float y = odomData->y;
-
-        if (count_time>10)
-        {
-            count_time=0;
-            sign=sign*-1;
-        }
+        LinearController(odomData, linear_velocity, angular_velocity);
         
-        // Calculate velocities
-        double linear_velocity = sign*0.1;
-        double angular_velocity = 0.5;
-
         // Format message
         int message_length = std::snprintf(buffer, sizeof(buffer),
             "---START---{\"linear\": %.2f, \"angular\": %.2f}___END___",
@@ -101,7 +129,6 @@ void SendCmdVel(int port) {
 
         // Sleep before sending the next command
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        count_time++;
     }
 
     // Cleanup

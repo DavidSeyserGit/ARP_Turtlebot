@@ -32,7 +32,6 @@ run_main: all
 run_all: all
 	@echo "Running odom..."
 	@$(ODOM_BIN) & echo $$! > odom.pid
-	@sleep 2 # Give odom time to initialize shared memory
 	@echo "Running main..."
 	@$(CMD_VEL_BIN) & echo $$! > cmd_vel.pid
 	@echo "Both odom and main are running. Use 'make stop' to terminate."
@@ -41,7 +40,7 @@ run_all: all
 stop:
 	@echo "Stopping processes..."
 	@if [ -f odom.pid ]; then kill -9 $$(cat odom.pid) && rm -f odom.pid; fi
-	@if [ -f main.pid ]; then kill -9 $$(cat main.pid) && rm -f main.pid; fi
+	@if [ -f cmd_vel.pid ]; then kill -9 $$(cat cmd_vel.pid) && rm -f cmd_vel.pid; fi
 	@echo "Processes terminated."
 
 # Clean the build directory
