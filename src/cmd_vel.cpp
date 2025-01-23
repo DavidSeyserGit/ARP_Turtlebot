@@ -14,8 +14,8 @@
 
 void LinearController(const OdomData* odomData, double& linear_velocity, double& angular_velocity) {
     // Target position and orientation
-    constexpr float target_x = 4.0; // Replace with your desired target x
-    constexpr float target_y = 0.0; // Replace with your desired target y
+    constexpr float target_x = 1.0; // Replace with your desired target x
+    constexpr float target_y =0.0; // Replace with your desired target y
     constexpr float target_theta = 0.0; // Replace with your desired target orientation
 
     // Calculate errors
@@ -36,16 +36,16 @@ void LinearController(const OdomData* odomData, double& linear_velocity, double&
     while (beta < -M_PI) beta += 2 * M_PI;
 
     // Control gains
-    constexpr float k_rho = 0.7;  // Gain for linear velocity
-    constexpr float k_alpha = 1; // Gain for alpha (heading correction)
-    constexpr float k_beta = -0.5; // Gain for beta (orientation correction)
+    constexpr float k_rho = 0.5;  // Gain for linear velocity
+    constexpr float k_alpha = 0.7; // Gain for alpha (heading correction)
+    constexpr float k_beta = -0.1; // Gain for beta (orientation correction)
 
     // Compute velocities
     linear_velocity = k_rho * rho;
     angular_velocity = k_alpha * alpha + k_beta * beta;
 
     // Stop moving if close enough to the target
-    if (rho < 0.25) {
+    if (rho < 0.4) {
         linear_velocity = 0.0;
         angular_velocity = 0.0;
     }
@@ -128,7 +128,8 @@ void SendCmdVel(int port) {
         std::cout << "Sent command: " << std::string(buffer, message_length) << std::endl;
 
         // Sleep before sending the next command
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        // std::this_thread::sleep_for(std::chrono::seconds(1));
+        usleep(300000);
     }
 
     // Cleanup

@@ -93,7 +93,7 @@ int main()
                     // Access ranges array
                     ondemand::array ranges = data["ranges"];
 
-                    create_map(ranges, px_height, px_width, 72, -odomData->y, odomData->x, odomData->theta);
+                    create_map(ranges, px_height, px_width, 72, -odomData->y, -odomData->x, -odomData->theta);
                     // create_map(ranges, px_height, px_width, 144, 0.0, 0.0, 0.0);
                     sleep(1);
                 }
@@ -110,7 +110,7 @@ int main()
             }
 
             i += 0.01;
-            usleep(100000);
+            usleep(10000);
         }
     }
     catch (const std::exception &e)

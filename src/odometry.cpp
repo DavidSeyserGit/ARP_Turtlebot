@@ -61,7 +61,7 @@ void ProcessAndStoreOdometryData(Client& client, OdomData* odom_data) {
             try {
                 std::regex regex_x(R"("x":\s*(-?\d+\.\d+))");
                 std::regex regex_y(R"("y":\s*(-?\d+\.\d+))");
-                std::regex regex_theta(R"("z":\s*(-?\d+\.\d+))");
+                std::regex regex_theta(R"("orientation":\s*\{[^}]*"z":\s*(-?\d+\.\d+))");
 
                 std::smatch match;
 
