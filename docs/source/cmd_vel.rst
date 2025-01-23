@@ -20,7 +20,7 @@ Controls the linear and angular velocity of the robot to reach a target position
    :param angular_velocity: Reference to the angular velocity to be controlled.
    :type angular_velocity: double&
 
-   :return: None
+   :returns: None
 
 SendCmdVel
 ----------
