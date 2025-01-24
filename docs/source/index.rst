@@ -20,6 +20,7 @@ Contents
 
    cmd_vel
    laser_data
+   odom
 
 .. note::
 
