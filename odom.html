@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>odometry Module &mdash; APR_Turtlebot 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="laser_data Module" href="laser_data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            APR_Turtlebot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Files:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cmd_vel.html">cmd_vel Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="laser_data.html">laser_data Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">odometry Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#initializesharedmemory">InitializeSharedMemory</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv422InitializeSharedMemoryRi"><code class="docutils literal notranslate"><span class="pre">InitializeSharedMemory()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#processandstoreodometrydata">ProcessAndStoreOdometryData</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv427ProcessAndStoreOdometryDataR6ClientP8OdomData"><code class="docutils literal notranslate"><span class="pre">ProcessAndStoreOdometryData()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">APR_Turtlebot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">odometry Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/odom.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="odometry-module">
+<h1>odometry Module<a class="headerlink" href="#odometry-module" title="Link to this heading"></a></h1>
+<p>The <cite>odometry</cite> module provides functionality for reading odometry data and saving the processed data into shared memory for further use.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+</section>
+<section id="initializesharedmemory">
+<h2>InitializeSharedMemory<a class="headerlink" href="#initializesharedmemory" title="Link to this heading"></a></h2>
+<p>Initializes a shared memory region for storing odometry data.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422InitializeSharedMemoryRi">
+<span id="_CPPv322InitializeSharedMemoryRi"></span><span id="_CPPv222InitializeSharedMemoryRi"></span><span id="InitializeSharedMemory__iR"></span><span class="n"><span class="pre">OdomData</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">InitializeSharedMemory</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">shm_fd</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422InitializeSharedMemoryRi" title="Link to this definition"></a><br /></dt>
+<dd><p>Initializes a shared memory object for odometry data storage. If the shared memory already exists, it is cleaned up and recreated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>shm_fd</strong> – A reference to the shared memory file descriptor.</p>
+</dd>
+<dt class="field-even">Type shm_fd<span class="colon">:</span></dt>
+<dd class="field-even"><p>int&amp;</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A pointer to the initialized shared memory region, cast to an <cite>OdomData</cite> object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>OdomData*</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="processandstoreodometrydata">
+<h2>ProcessAndStoreOdometryData<a class="headerlink" href="#processandstoreodometrydata" title="Link to this heading"></a></h2>
+<p>Processes odometry data received from a client and stores it in shared memory.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv427ProcessAndStoreOdometryDataR6ClientP8OdomData">
+<span id="_CPPv327ProcessAndStoreOdometryDataR6ClientP8OdomData"></span><span id="_CPPv227ProcessAndStoreOdometryDataR6ClientP8OdomData"></span><span id="ProcessAndStoreOdometryData__ClientR.OdomDataP"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ProcessAndStoreOdometryData</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Client</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">client</span></span>, <span class="n"><span class="pre">OdomData</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">odom_data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv427ProcessAndStoreOdometryDataR6ClientP8OdomData" title="Link to this definition"></a><br /></dt>
+<dd><p>Continuously receives odometry data from the client, extracts the relevant information (x, y, and orientation), and updates the shared memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> – A reference to the client object used to receive odometry data.</p></li>
+<li><p><strong>odom_data</strong> – A pointer to the shared memory region for storing odometry data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type client<span class="colon">:</span></dt>
+<dd class="field-even"><p>Client&amp;</p>
+</dd>
+<dt class="field-odd">Type odom_data<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OdomData*</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>Below is an example of how to use the <cite>odometry</cite> module to initialize shared memory and process incoming odometry data.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;odom.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Shared memory setup</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">shm_fd</span><span class="p">;</span>
+<span class="w">        </span><span class="n">OdomData</span><span class="o">*</span><span class="w"> </span><span class="n">odom_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">InitializeSharedMemory</span><span class="p">(</span><span class="n">shm_fd</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Client setup</span>
+<span class="w">        </span><span class="n">Client</span><span class="w"> </span><span class="n">odomClient</span><span class="p">(</span><span class="mi">9998</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Process and store odometry data</span>
+<span class="w">        </span><span class="n">ProcessAndStoreOdometryData</span><span class="p">(</span><span class="n">odomClient</span><span class="p">,</span><span class="w"> </span><span class="n">odom_data</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Cleanup shared resources</span>
+<span class="w">        </span><span class="n">munmap</span><span class="p">(</span><span class="n">odom_data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">OdomData</span><span class="p">));</span>
+<span class="w">        </span><span class="n">close</span><span class="p">(</span><span class="n">shm_fd</span><span class="p">);</span>
+<span class="w">        </span><span class="n">shm_unlink</span><span class="p">(</span><span class="n">kSharedMemoryName</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Error: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="laser_data.html" class="btn btn-neutral float-left" title="laser_data Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, David Seyser.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

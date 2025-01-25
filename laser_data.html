@@ -1,0 +1,244 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>laser_data Module &mdash; APR_Turtlebot 1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=29a6c3e3"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="odometry Module" href="odom.html" />
+    <link rel="prev" title="cmd_vel Module" href="cmd_vel.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            APR_Turtlebot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Files:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="cmd_vel.html">cmd_vel Module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">laser_data Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#extract-json">extract_json</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv412extract_jsonRKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">extract_json()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv410create_mapRN8ondemand5arrayEKiKiffff"><code class="docutils literal notranslate"><span class="pre">create_map()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="odom.html">odometry Module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">APR_Turtlebot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">laser_data Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/laser_data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="laser-data-module">
+<h1>laser_data Module<a class="headerlink" href="#laser-data-module" title="Link to this heading"></a></h1>
+<p>The <cite>laser_data</cite> module provides functions for reading laser scan data and visualizing it on a map. This module is essential for mapping the environment and processing sensor data.</p>
+<section id="extract-json">
+<h2>extract_json<a class="headerlink" href="#extract-json" title="Link to this heading"></a></h2>
+<p>Processes a given string and extracts relevant data in JSON format.</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412extract_jsonRKNSt6stringE">
+<span id="_CPPv312extract_jsonRKNSt6stringE"></span><span id="_CPPv212extract_jsonRKNSt6stringE"></span><span id="extract_json__ssCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">extract_json</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">text</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412extract_jsonRKNSt6stringE" title="Link to this definition"></a><br /></dt>
+<dd><p>Extracts JSON-formatted data from the given text input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> – The input string containing the data to be processed.</p>
+</dd>
+<dt class="field-even">Type text<span class="colon">:</span></dt>
+<dd class="field-even"><p>const std::string&amp;</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A string containing the extracted JSON data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>std::string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv410create_mapRN8ondemand5arrayEKiKiffff">
+<span id="_CPPv310create_mapRN8ondemand5arrayEKiKiffff"></span><span id="_CPPv210create_mapRN8ondemand5arrayEKiKiffff"></span><span id="create_map__ondemand::arrayR.iC.iC.float.float.float.float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_map</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">ondemand</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ranges</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">px_height</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">px_width</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pixels_per_meter</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">Tx_robot</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">Ty_robot</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">R_robot</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410create_mapRN8ondemand5arrayEKiKiffff" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a map from the given laser scan data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ranges</strong> – The array of range values from the laser scan.</p></li>
+<li><p><strong>px_height</strong> – The height of the map in pixels.</p></li>
+<li><p><strong>px_width</strong> – The width of the map in pixels.</p></li>
+<li><p><strong>pixels_per_meter</strong> – The scale factor for converting meters to pixels.</p></li>
+<li><p><strong>Tx_robot</strong> – The x-coordinate of the robot’s position.</p></li>
+<li><p><strong>Ty_robot</strong> – The y-coordinate of the robot’s position.</p></li>
+<li><p><strong>R_robot</strong> – The orientation of the robot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type ranges<span class="colon">:</span></dt>
+<dd class="field-even"><p>ondemand::array</p>
+</dd>
+<dt class="field-odd">Type px_height<span class="colon">:</span></dt>
+<dd class="field-odd"><p>const int</p>
+</dd>
+<dt class="field-even">Type px_width<span class="colon">:</span></dt>
+<dd class="field-even"><p>const int</p>
+</dd>
+<dt class="field-odd">Type pixels_per_meter<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Type Tx_robot<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Type Ty_robot<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Type R_robot<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>### Using <cite>extract_json</cite> and <cite>create_map</cite></p>
+<p>The following example demonstrates how to read laser scan data from a file, extract the JSON content, and use it to generate a 2D map.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;../include/laser_data/laser_data.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;../include/simdjson/simdjson.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;opencv2/opencv.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Step 1: Read laser scan data from a file</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="n">file</span><span class="p">(</span><span class="s">&quot;laserdata.txt&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">file</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">&quot;Failed to open laserdata.txt&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="w">        </span><span class="n">buffer</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">file</span><span class="p">.</span><span class="n">rdbuf</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">file_content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+
+<span class="w">        </span><span class="c1">// Step 2: Extract JSON content from the file</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">json_content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">extract_json</span><span class="p">(</span><span class="n">file_content</span><span class="p">);</span>
+
+<span class="w">        </span><span class="c1">// Step 3: Parse the JSON content to get ranges</span>
+<span class="w">        </span><span class="n">simdjson</span><span class="o">::</span><span class="n">ondemand</span><span class="o">::</span><span class="n">parser</span><span class="w"> </span><span class="n">parser</span><span class="p">;</span>
+<span class="w">        </span><span class="n">simdjson</span><span class="o">::</span><span class="n">ondemand</span><span class="o">::</span><span class="n">document</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parser</span><span class="p">.</span><span class="n">iterate</span><span class="p">(</span><span class="n">json_content</span><span class="p">);</span>
+<span class="w">        </span><span class="n">simdjson</span><span class="o">::</span><span class="n">ondemand</span><span class="o">::</span><span class="n">array</span><span class="w"> </span><span class="n">ranges</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="s">&quot;ranges&quot;</span><span class="p">];</span>
+
+<span class="w">        </span><span class="c1">// Step 4: Define map parameters</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">map_height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w">       </span><span class="c1">// Map height in pixels</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">map_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span><span class="w">        </span><span class="c1">// Map width in pixels</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">pixels_per_meter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100.0f</span><span class="p">;</span><span class="w">  </span><span class="c1">// Scale: 100 pixels per meter</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">Tx_robot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span><span class="w">      </span><span class="c1">// Robot&#39;s x-coordinate in world coordinates</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">Ty_robot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span><span class="w">      </span><span class="c1">// Robot&#39;s y-coordinate in world coordinates</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">R_robot</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0f</span><span class="p">;</span><span class="w">       </span><span class="c1">// Robot&#39;s orientation in radians</span>
+
+<span class="w">        </span><span class="c1">// Step 5: Generate the map</span>
+<span class="w">        </span><span class="n">create_map</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span><span class="w"> </span><span class="n">map_height</span><span class="p">,</span><span class="w"> </span><span class="n">map_width</span><span class="p">,</span><span class="w"> </span><span class="n">pixels_per_meter</span><span class="p">,</span><span class="w"> </span><span class="n">Tx_robot</span><span class="p">,</span><span class="w"> </span><span class="n">Ty_robot</span><span class="p">,</span><span class="w"> </span><span class="n">R_robot</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Map generated successfully. Check the visualization window.&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Error: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cmd_vel.html" class="btn btn-neutral float-left" title="cmd_vel Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="odom.html" class="btn btn-neutral float-right" title="odometry Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, David Seyser.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
