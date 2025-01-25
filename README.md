@@ -8,17 +8,9 @@ A lightweight project for reading sensor data and writing velocities commands to
 - Sending Velocities for robot movement
 - Framework-independent, modular design
 
-## Build Instructions
+## Documentation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/DavidSeyserGit/ARP_Turtlebot
-   cd ARP_Turtlebot
-   make
-   ```
-   
-2. Run the program
-   ```bash
-   make run_main
-   ```
+For detailed instructions on installing the project visit the documentation page:
+[https://davidseysergit.github.io/ARP_Turtlebot/]
+
 
