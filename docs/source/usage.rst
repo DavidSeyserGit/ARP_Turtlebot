@@ -33,7 +33,7 @@ And in a seperate terminal run the following command
 
 Stopping the Program
 --------------------
-**Note:** TO STOP THE PROGRAM RUN:
+**Note:** TO STOP THE PROGRAM RUN THE FOLLOWING IN A SEPERATE TERMINAL:
 
 .. code-block:: console
 
