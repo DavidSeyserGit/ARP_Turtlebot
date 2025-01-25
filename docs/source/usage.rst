@@ -29,3 +29,12 @@ And in a seperate terminal run the following command
 .. code-block:: console
 
    ./build/src/main
+
+
+Stopping the Program
+--------------------
+**Note:** TO STOP THE PROGRAM RUN:
+
+.. code-block:: console
+
+   make stop
