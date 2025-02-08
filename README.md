@@ -4,6 +4,7 @@ This project provides a lightweight C++ implementation for controlling a Turtleb
 
 [![Code Style: Google](https://img.shields.io/badge/code%20style-google-blue.svg)](https://google.github.io/styleguide/cppguide.html) 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/DavidSeyserGit/ARP_Turtlebot) 
+[![Platform](https://img.shields.io/badge/platform-Linux%20%2F%20macOS-green.svg)](#)
 
 ## Features
 
