@@ -2,9 +2,8 @@
 
 This project provides a lightweight C++ implementation for controlling a Turtlebot3 robot. It focuses on real-time control and data acquisition, enabling basic navigation and environmental mapping.
 
-[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blue.svg)](https://google.github.io/styleguide/cppguide.html) *(Optional: If you follow a specific style guide)*
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/DavidSeyserGit/ARP_Turtlebot) *(Optional: A general open-source badge)*
-
+[![Code Style: Google](https://img.shields.io/badge/code%20style-google-blue.svg)](https://google.github.io/styleguide/cppguide.html) 
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/DavidSeyserGit/ARP_Turtlebot) 
 
 ## Features
 
